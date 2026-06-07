@@ -14,7 +14,181 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      milestones: {
+        Row: {
+          completed: boolean
+          completed_at: string | null
+          created_at: string
+          id: string
+          position: number
+          sprint_id: string
+          title: string
+          user_id: string
+        }
+        Insert: {
+          completed?: boolean
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          position?: number
+          sprint_id: string
+          title: string
+          user_id: string
+        }
+        Update: {
+          completed?: boolean
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          position?: number
+          sprint_id?: string
+          title?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "milestones_sprint_id_fkey"
+            columns: ["sprint_id"]
+            isOneToOne: false
+            referencedRelation: "sprints"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      onboarding_state: {
+        Row: {
+          affirmation_viewed: boolean
+          checklist_dismissed: boolean
+          created_at: string
+          first_milestone_celebrated: boolean
+          tooltips_seen: boolean
+          updated_at: string
+          user_id: string
+          welcome_seen: boolean
+        }
+        Insert: {
+          affirmation_viewed?: boolean
+          checklist_dismissed?: boolean
+          created_at?: string
+          first_milestone_celebrated?: boolean
+          tooltips_seen?: boolean
+          updated_at?: string
+          user_id: string
+          welcome_seen?: boolean
+        }
+        Update: {
+          affirmation_viewed?: boolean
+          checklist_dismissed?: boolean
+          created_at?: string
+          first_milestone_celebrated?: boolean
+          tooltips_seen?: boolean
+          updated_at?: string
+          user_id?: string
+          welcome_seen?: boolean
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          display_name: string | null
+          email: string | null
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          display_name?: string | null
+          email?: string | null
+          id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          display_name?: string | null
+          email?: string | null
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      rewards: {
+        Row: {
+          claimed: boolean
+          claimed_at: string | null
+          created_at: string
+          description: string | null
+          id: string
+          sprint_id: string | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          claimed?: boolean
+          claimed_at?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          sprint_id?: string | null
+          title: string
+          user_id: string
+        }
+        Update: {
+          claimed?: boolean
+          claimed_at?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          sprint_id?: string | null
+          title?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rewards_sprint_id_fkey"
+            columns: ["sprint_id"]
+            isOneToOne: false
+            referencedRelation: "sprints"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sprints: {
+        Row: {
+          created_at: string
+          description: string | null
+          end_date: string | null
+          id: string
+          start_date: string
+          status: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          end_date?: string | null
+          id?: string
+          start_date?: string
+          status?: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          end_date?: string | null
+          id?: string
+          start_date?: string
+          status?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
