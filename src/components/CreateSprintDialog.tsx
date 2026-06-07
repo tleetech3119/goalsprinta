@@ -50,8 +50,17 @@ export function CreateSprintDialog({
     const { data: userData } = await supabase.auth.getUser();
     if (!userData.user) { setLoading(false); return; }
     const userId = userData.user.id;
+
+    let finalDescription = description || "";
+    if (selectedTemplate?.budgetCategories) {
+      const lines = selectedTemplate.budgetCategories
+        .map((c) => `• ${c.label}: $${(budget[c.label] ?? 0).toLocaleString()}`)
+        .join("\n");
+      finalDescription = `${finalDescription}\n\nBudget breakdown (Total: $${budgetTotal.toLocaleString()}):\n${lines}`.trim();
+    }
+
     const { data, error } = await supabase.from("sprints").insert({
-      user_id: userId, title, description: description || null,
+      user_id: userId, title, description: finalDescription || null,
       end_date: endDate || null,
     }).select().single();
     if (error) { setLoading(false); return toast.error(error.message); }
