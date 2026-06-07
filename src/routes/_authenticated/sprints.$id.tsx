@@ -14,7 +14,7 @@ import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { useOnboarding } from "@/lib/onboarding-context";
 
-type Sprint = { id: string; title: string; description: string | null; end_date: string | null; status: string; hold_reason: string | null; resume_date: string | null };
+type Sprint = { id: string; title: string; description: string | null; start_date: string; end_date: string | null; status: string; hold_reason: string | null; resume_date: string | null };
 type Milestone = { id: string; title: string; completed: boolean; position: number; due_date: string | null };
 
 
