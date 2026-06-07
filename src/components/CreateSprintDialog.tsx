@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -20,10 +21,11 @@ export function CreateSprintDialog({
   const [tab, setTab] = useState<"blank" | "templates">("blank");
   const [selectedTemplate, setSelectedTemplate] = useState<SprintTemplate | null>(null);
   const [budget, setBudget] = useState<Record<string, number>>({});
+  const [selectedMilestones, setSelectedMilestones] = useState<Set<number>>(new Set());
 
   const reset = () => {
     setTitle(""); setDescription(""); setEndDate("");
-    setSelectedTemplate(null); setTab("blank"); setBudget({});
+    setSelectedTemplate(null); setTab("blank"); setBudget({}); setSelectedMilestones(new Set());
   };
 
   const pickTemplate = (t: SprintTemplate) => {
@@ -40,6 +42,15 @@ export function CreateSprintDialog({
     } else {
       setBudget({});
     }
+    setSelectedMilestones(new Set(t.milestones.map((_, i) => i)));
+  };
+
+  const toggleMilestone = (i: number) => {
+    setSelectedMilestones((prev) => {
+      const next = new Set(prev);
+      if (next.has(i)) next.delete(i); else next.add(i);
+      return next;
+    });
   };
 
   const budgetTotal = Object.values(budget).reduce((s, n) => s + (Number.isFinite(n) ? n : 0), 0);
@@ -66,11 +77,16 @@ export function CreateSprintDialog({
     if (error) { setLoading(false); return toast.error(error.message); }
 
     if (selectedTemplate) {
-      const rows = selectedTemplate.milestones.map((m, i) => ({
-        sprint_id: data!.id, user_id: userId, title: m, position: i,
-      }));
-      const { error: mErr } = await supabase.from("milestones").insert(rows);
-      if (mErr) toast.error(`Sprint created, but milestones failed: ${mErr.message}`);
+      const picked = selectedTemplate.milestones
+        .map((m, i) => ({ m, i }))
+        .filter(({ i }) => selectedMilestones.has(i));
+      if (picked.length > 0) {
+        const rows = picked.map(({ m }, idx) => ({
+          sprint_id: data!.id, user_id: userId, title: m, position: idx,
+        }));
+        const { error: mErr } = await supabase.from("milestones").insert(rows);
+        if (mErr) toast.error(`Sprint created, but milestones failed: ${mErr.message}`);
+      }
     }
 
     setLoading(false);
@@ -131,14 +147,48 @@ export function CreateSprintDialog({
               <div>
                 <button
                   type="button"
-                  onClick={() => { setSelectedTemplate(null); setTitle(""); setDescription(""); setEndDate(""); setBudget({}); }}
+                  onClick={() => { setSelectedTemplate(null); setTitle(""); setDescription(""); setEndDate(""); setBudget({}); setSelectedMilestones(new Set()); }}
                   className="mb-3 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
                 >
                   <ArrowLeft className="h-3.5 w-3.5" /> Back to templates
                 </button>
                 <div className="mb-3 rounded-lg border border-border bg-muted/30 p-3 text-xs text-muted-foreground">
-                  <span className="font-medium text-foreground">{selectedTemplate.emoji} {selectedTemplate.name}</span> — {selectedTemplate.milestones.length} milestones will be added automatically.
+                  <span className="font-medium text-foreground">{selectedTemplate.emoji} {selectedTemplate.name}</span> — pick which milestones to include below.
                 </div>
+
+                <div className="mb-4 rounded-xl border border-border bg-card/60 p-4">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-sm font-semibold">Built-in milestones</Label>
+                    <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                      <span>{selectedMilestones.size} / {selectedTemplate.milestones.length} selected</span>
+                      <button
+                        type="button"
+                        onClick={() => setSelectedMilestones(
+                          selectedMilestones.size === selectedTemplate.milestones.length
+                            ? new Set()
+                            : new Set(selectedTemplate.milestones.map((_, i) => i))
+                        )}
+                        className="text-primary hover:underline"
+                      >
+                        {selectedMilestones.size === selectedTemplate.milestones.length ? "Clear all" : "Select all"}
+                      </button>
+                    </div>
+                  </div>
+                  <p className="mt-1 text-xs text-muted-foreground">Uncheck any you don't want added to your sprint.</p>
+                  <div className="mt-3 grid max-h-56 gap-2 overflow-y-auto pr-1">
+                    {selectedTemplate.milestones.map((m, i) => (
+                      <label key={i} className="flex cursor-pointer items-start gap-2 rounded-md p-1.5 text-sm hover:bg-muted/40">
+                        <Checkbox
+                          checked={selectedMilestones.has(i)}
+                          onCheckedChange={() => toggleMilestone(i)}
+                          className="mt-0.5"
+                        />
+                        <span className={selectedMilestones.has(i) ? "" : "text-muted-foreground line-through"}>{m}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
 
                 {selectedTemplate.budgetCategories && (
                   <div className="mb-4 rounded-xl border border-border bg-card/60 p-4">
