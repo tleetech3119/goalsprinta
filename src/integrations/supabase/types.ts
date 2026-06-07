@@ -19,6 +19,7 @@ export type Database = {
           completed: boolean
           completed_at: string | null
           created_at: string
+          due_date: string | null
           id: string
           position: number
           sprint_id: string
@@ -29,6 +30,7 @@ export type Database = {
           completed?: boolean
           completed_at?: string | null
           created_at?: string
+          due_date?: string | null
           id?: string
           position?: number
           sprint_id: string
@@ -39,6 +41,7 @@ export type Database = {
           completed?: boolean
           completed_at?: string | null
           created_at?: string
+          due_date?: string | null
           id?: string
           position?: number
           sprint_id?: string
