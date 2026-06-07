@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Plus, Target, ArrowRight, Calendar, Award, CheckCircle2, RotateCcw } from "lucide-react";
+import { Plus, Target, ArrowRight, Calendar, Award, CheckCircle2, RotateCcw, ArrowLeft } from "lucide-react";
 import { CreateSprintDialog } from "@/components/CreateSprintDialog";
 import { useOnboarding } from "@/lib/onboarding-context";
 import { toast } from "sonner";
@@ -70,7 +70,10 @@ function SprintDashboard() {
 
   return (
     <div className="container mx-auto max-w-6xl px-6 py-8">
-      <div className="flex flex-wrap items-end justify-between gap-4">
+      <Link to="/dashboard" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
+        <ArrowLeft className="h-4 w-4" /> Back
+      </Link>
+      <div className="mt-4 flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="font-display text-3xl font-bold">Sprint Dashboard</h1>
           <p className="mt-1 text-sm text-muted-foreground">Your active sprints and completed wins.</p>
