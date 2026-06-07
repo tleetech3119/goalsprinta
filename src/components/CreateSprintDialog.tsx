@@ -19,10 +19,11 @@ export function CreateSprintDialog({
   const [loading, setLoading] = useState(false);
   const [tab, setTab] = useState<"blank" | "templates">("blank");
   const [selectedTemplate, setSelectedTemplate] = useState<SprintTemplate | null>(null);
+  const [budget, setBudget] = useState<Record<string, number>>({});
 
   const reset = () => {
     setTitle(""); setDescription(""); setEndDate("");
-    setSelectedTemplate(null); setTab("blank");
+    setSelectedTemplate(null); setTab("blank"); setBudget({});
   };
 
   const pickTemplate = (t: SprintTemplate) => {
@@ -32,7 +33,16 @@ export function CreateSprintDialog({
     const d = new Date();
     d.setDate(d.getDate() + t.durationDays);
     setEndDate(d.toISOString().slice(0, 10));
+    if (t.budgetCategories) {
+      const init: Record<string, number> = {};
+      t.budgetCategories.forEach((c) => { init[c.label] = c.suggested; });
+      setBudget(init);
+    } else {
+      setBudget({});
+    }
   };
+
+  const budgetTotal = Object.values(budget).reduce((s, n) => s + (Number.isFinite(n) ? n : 0), 0);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
