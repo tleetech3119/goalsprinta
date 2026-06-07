@@ -9,13 +9,14 @@ import { Badge } from "@/components/ui/badge";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogTrigger,
 } from "@/components/ui/dialog";
-import { ArrowLeft, Plus, Target, Trash2, CalendarIcon, X, Pause, Play, CheckCircle2, RotateCcw } from "lucide-react";
+import { ArrowLeft, Plus, Target, Trash2, CalendarIcon, X, Pause, Play, CheckCircle2, RotateCcw, Trophy, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { useOnboarding } from "@/lib/onboarding-context";
 
 type Sprint = { id: string; title: string; description: string | null; start_date: string; end_date: string | null; status: string; hold_reason: string | null; resume_date: string | null };
 type Milestone = { id: string; title: string; completed: boolean; position: number; due_date: string | null };
+type Reward = { id: string; title: string; description: string | null; claimed: boolean };
 
 
 const todayInputValue = () => {
@@ -36,7 +37,10 @@ function SprintDetail() {
   const { state, refresh, update } = useOnboarding();
   const [sprint, setSprint] = useState<Sprint | null>(null);
   const [milestones, setMilestones] = useState<Milestone[]>([]);
+  const [rewards, setRewards] = useState<Reward[]>([]);
   const [newTitle, setNewTitle] = useState("");
+  const [rewardTitle, setRewardTitle] = useState("");
+  const [rewardDesc, setRewardDesc] = useState("");
   const [loading, setLoading] = useState(true);
   const [holdOpen, setHoldOpen] = useState(false);
   const [holdReason, setHoldReason] = useState("");
@@ -45,16 +49,43 @@ function SprintDetail() {
 
   const load = async () => {
     setLoading(true);
-    const [{ data: s }, { data: ms }] = await Promise.all([
+    const [{ data: s }, { data: ms }, { data: rs }] = await Promise.all([
       supabase.from("sprints").select("*").eq("id", id).maybeSingle(),
       supabase.from("milestones").select("*").eq("sprint_id", id).order("position", { ascending: true }).order("created_at", { ascending: true }),
+      supabase.from("rewards").select("*").eq("sprint_id", id).order("created_at", { ascending: true }),
     ]);
     setSprint(s as Sprint | null);
     setMilestones((ms ?? []) as Milestone[]);
+    setRewards((rs ?? []) as Reward[]);
     setLoading(false);
   };
 
   useEffect(() => { load(); }, [id]);
+
+  const addReward = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!rewardTitle.trim()) return;
+    const { data: userData } = await supabase.auth.getUser();
+    const { data, error } = await supabase.from("rewards").insert({
+      sprint_id: id, user_id: userData.user!.id, title: rewardTitle.trim(), description: rewardDesc.trim() || null,
+    }).select().single();
+    if (error) return toast.error(error.message);
+    setRewards((r) => [...r, data as Reward]);
+    setRewardTitle(""); setRewardDesc("");
+    await refresh();
+  };
+
+  const toggleReward = async (r: Reward) => {
+    const next = !r.claimed;
+    setRewards((arr) => arr.map((x) => x.id === r.id ? { ...x, claimed: next } : x));
+    await supabase.from("rewards").update({ claimed: next, claimed_at: next ? new Date().toISOString() : null }).eq("id", r.id);
+  };
+
+  const removeReward = async (rid: string) => {
+    setRewards((arr) => arr.filter((x) => x.id !== rid));
+    await supabase.from("rewards").delete().eq("id", rid);
+    await refresh();
+  };
 
   const addMilestone = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -327,6 +358,41 @@ function SprintDetail() {
               </li>
             );
           })}
+        </ul>
+      </div>
+
+      <div className="mt-8">
+        <div className="flex items-center gap-2">
+          <Trophy className="h-5 w-5 text-primary" />
+          <h2 className="font-display text-xl font-semibold">Rewards</h2>
+        </div>
+        <p className="mt-1 text-sm text-muted-foreground">Pick a reward to motivate this sprint.</p>
+        <form onSubmit={addReward} className="mt-4 grid gap-2 sm:grid-cols-[1fr_1.5fr_auto]">
+          <Input value={rewardTitle} onChange={(e) => setRewardTitle(e.target.value)} placeholder="Reward (e.g. weekend trip)" />
+          <Input value={rewardDesc} onChange={(e) => setRewardDesc(e.target.value)} placeholder="Why this one? (optional)" />
+          <Button type="submit" className="bg-gradient-primary text-primary-foreground"><Plus className="h-4 w-4" /></Button>
+        </form>
+        <ul className="mt-4 space-y-2">
+          {rewards.length === 0 && (
+            <li className="rounded-xl border border-dashed border-border bg-card/40 p-6 text-center text-sm text-muted-foreground">
+              No rewards yet — add one to celebrate finishing this sprint.
+            </li>
+          )}
+          {rewards.map((r) => (
+            <li key={r.id} className={cn("flex items-center gap-3 rounded-xl border border-border bg-card p-3", r.claimed && "opacity-70")}>
+              <div className="grid h-8 w-8 place-items-center rounded-md bg-accent/40 text-primary"><Trophy className="h-4 w-4" /></div>
+              <div className="flex-1">
+                <div className={cn("font-medium", r.claimed && "line-through text-muted-foreground")}>{r.title}</div>
+                {r.description && <div className="text-xs text-muted-foreground">{r.description}</div>}
+              </div>
+              <Button variant={r.claimed ? "secondary" : "default"} size="sm" onClick={() => toggleReward(r)} className={cn(!r.claimed && "bg-gradient-primary text-primary-foreground")}>
+                <Check className="mr-1 h-3 w-3" />{r.claimed ? "Claimed" : "Claim"}
+              </Button>
+              <button onClick={() => removeReward(r.id)} className="rounded p-1.5 text-muted-foreground hover:bg-muted hover:text-destructive">
+                <Trash2 className="h-4 w-4" />
+              </button>
+            </li>
+          ))}
         </ul>
       </div>
     </div>
