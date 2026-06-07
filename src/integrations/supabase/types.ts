@@ -158,6 +158,7 @@ export type Database = {
       }
       sprints: {
         Row: {
+          completed_at: string | null
           created_at: string
           description: string | null
           end_date: string | null
@@ -171,6 +172,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          completed_at?: string | null
           created_at?: string
           description?: string | null
           end_date?: string | null
@@ -184,6 +186,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          completed_at?: string | null
           created_at?: string
           description?: string | null
           end_date?: string | null
