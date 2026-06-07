@@ -16,6 +16,7 @@ import { Route as AuthenticatedWinsRouteImport } from './routes/_authenticated/w
 import { Route as AuthenticatedRewardsRouteImport } from './routes/_authenticated/rewards'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedAffirmationsRouteImport } from './routes/_authenticated/affirmations'
+import { Route as AuthenticatedSprintsIndexRouteImport } from './routes/_authenticated/sprints.index'
 import { Route as AuthenticatedSprintsIdRouteImport } from './routes/_authenticated/sprints.$id'
 
 const AuthRoute = AuthRouteImport.update({
@@ -53,6 +54,12 @@ const AuthenticatedAffirmationsRoute =
     path: '/affirmations',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedSprintsIndexRoute =
+  AuthenticatedSprintsIndexRouteImport.update({
+    id: '/sprints/',
+    path: '/sprints/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedSprintsIdRoute = AuthenticatedSprintsIdRouteImport.update({
   id: '/sprints/$id',
   path: '/sprints/$id',
@@ -67,6 +74,7 @@ export interface FileRoutesByFullPath {
   '/rewards': typeof AuthenticatedRewardsRoute
   '/wins': typeof AuthenticatedWinsRoute
   '/sprints/$id': typeof AuthenticatedSprintsIdRoute
+  '/sprints/': typeof AuthenticatedSprintsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -76,6 +84,7 @@ export interface FileRoutesByTo {
   '/rewards': typeof AuthenticatedRewardsRoute
   '/wins': typeof AuthenticatedWinsRoute
   '/sprints/$id': typeof AuthenticatedSprintsIdRoute
+  '/sprints': typeof AuthenticatedSprintsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -87,6 +96,7 @@ export interface FileRoutesById {
   '/_authenticated/rewards': typeof AuthenticatedRewardsRoute
   '/_authenticated/wins': typeof AuthenticatedWinsRoute
   '/_authenticated/sprints/$id': typeof AuthenticatedSprintsIdRoute
+  '/_authenticated/sprints/': typeof AuthenticatedSprintsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -98,6 +108,7 @@ export interface FileRouteTypes {
     | '/rewards'
     | '/wins'
     | '/sprints/$id'
+    | '/sprints/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -107,6 +118,7 @@ export interface FileRouteTypes {
     | '/rewards'
     | '/wins'
     | '/sprints/$id'
+    | '/sprints'
   id:
     | '__root__'
     | '/'
@@ -117,6 +129,7 @@ export interface FileRouteTypes {
     | '/_authenticated/rewards'
     | '/_authenticated/wins'
     | '/_authenticated/sprints/$id'
+    | '/_authenticated/sprints/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -176,6 +189,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAffirmationsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/sprints/': {
+      id: '/_authenticated/sprints/'
+      path: '/sprints'
+      fullPath: '/sprints/'
+      preLoaderRoute: typeof AuthenticatedSprintsIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/sprints/$id': {
       id: '/_authenticated/sprints/$id'
       path: '/sprints/$id'
@@ -192,6 +212,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedRewardsRoute: typeof AuthenticatedRewardsRoute
   AuthenticatedWinsRoute: typeof AuthenticatedWinsRoute
   AuthenticatedSprintsIdRoute: typeof AuthenticatedSprintsIdRoute
+  AuthenticatedSprintsIndexRoute: typeof AuthenticatedSprintsIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -200,6 +221,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedRewardsRoute: AuthenticatedRewardsRoute,
   AuthenticatedWinsRoute: AuthenticatedWinsRoute,
   AuthenticatedSprintsIdRoute: AuthenticatedSprintsIdRoute,
+  AuthenticatedSprintsIndexRoute: AuthenticatedSprintsIndexRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
