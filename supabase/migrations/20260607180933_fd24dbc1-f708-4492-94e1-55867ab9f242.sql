@@ -1,0 +1,1 @@
+ALTER TABLE public.sprints ADD COLUMN IF NOT EXISTS hold_reason text, ADD COLUMN IF NOT EXISTS resume_date date;

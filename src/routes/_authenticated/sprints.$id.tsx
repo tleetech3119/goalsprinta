@@ -4,13 +4,19 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ArrowLeft, Plus, Target, Trash2, CalendarIcon, X } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
+import {
+  Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogTrigger,
+} from "@/components/ui/dialog";
+import { ArrowLeft, Plus, Target, Trash2, CalendarIcon, X, Pause, Play } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { useOnboarding } from "@/lib/onboarding-context";
 
-type Sprint = { id: string; title: string; description: string | null; end_date: string | null };
+type Sprint = { id: string; title: string; description: string | null; end_date: string | null; status: string; hold_reason: string | null; resume_date: string | null };
 type Milestone = { id: string; title: string; completed: boolean; position: number; due_date: string | null };
+
 
 const todayInputValue = () => {
   const today = new Date();
@@ -32,6 +38,10 @@ function SprintDetail() {
   const [milestones, setMilestones] = useState<Milestone[]>([]);
   const [newTitle, setNewTitle] = useState("");
   const [loading, setLoading] = useState(true);
+  const [holdOpen, setHoldOpen] = useState(false);
+  const [holdReason, setHoldReason] = useState("");
+  const [holdResume, setHoldResume] = useState("");
+
 
   const load = async () => {
     setLoading(true);
@@ -88,7 +98,29 @@ function SprintDetail() {
     if (error) toast.error(error.message);
   };
 
+  const putOnHold = async () => {
+    if (!holdReason.trim()) return toast.error("Please add a reason for the hold.");
+    if (!holdResume) return toast.error("Please pick a resume date.");
+    const { error } = await supabase.from("sprints").update({
+      status: "on_hold", hold_reason: holdReason.trim(), resume_date: holdResume,
+    }).eq("id", id);
+    if (error) return toast.error(error.message);
+    setSprint((s) => s ? { ...s, status: "on_hold", hold_reason: holdReason.trim(), resume_date: holdResume } : s);
+    setHoldOpen(false);
+    toast.success("Sprint placed on hold.");
+  };
+
+  const resumeSprint = async () => {
+    const { error } = await supabase.from("sprints").update({
+      status: "active", hold_reason: null, resume_date: null,
+    }).eq("id", id);
+    if (error) return toast.error(error.message);
+    setSprint((s) => s ? { ...s, status: "active", hold_reason: null, resume_date: null } : s);
+    toast.success("Sprint resumed.");
+  };
+
   if (loading) return <div className="p-8 text-muted-foreground">Loading…</div>;
+
   if (!sprint) return <div className="p-8">Sprint not found. <Link to="/dashboard" className="text-primary underline">Back</Link></div>;
 
   const done = milestones.filter((m) => m.completed).length;
@@ -102,11 +134,78 @@ function SprintDetail() {
       </Link>
 
       <div className="mt-6 rounded-3xl border border-border bg-card p-8 shadow-card">
-        <div className="grid h-12 w-12 place-items-center rounded-xl bg-gradient-primary text-primary-foreground shadow-glow">
-          <Target className="h-6 w-6" />
+        <div className="flex items-start justify-between gap-4">
+          <div className="grid h-12 w-12 place-items-center rounded-xl bg-gradient-primary text-primary-foreground shadow-glow">
+            <Target className="h-6 w-6" />
+          </div>
+          {sprint.status === "on_hold" ? (
+            <Button variant="outline" size="sm" onClick={resumeSprint}>
+              <Play className="mr-1 h-4 w-4" /> Resume
+            </Button>
+          ) : (
+            <Dialog open={holdOpen} onOpenChange={(o) => {
+              setHoldOpen(o);
+              if (o) { setHoldReason(sprint.hold_reason ?? ""); setHoldResume(sprint.resume_date ?? ""); }
+            }}>
+              <DialogTrigger asChild>
+                <Button variant="outline" size="sm">
+                  <Pause className="mr-1 h-4 w-4" /> Put on hold
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Put sprint on hold</DialogTitle>
+                  <DialogDescription>Tell us why you're pausing and when you plan to resume.</DialogDescription>
+                </DialogHeader>
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Reason for hold</label>
+                    <Textarea
+                      value={holdReason}
+                      onChange={(e) => setHoldReason(e.target.value)}
+                      placeholder="What's blocking you right now?"
+                      maxLength={500}
+                      rows={4}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Planned resume date</label>
+                    <Input
+                      type="date"
+                      value={holdResume}
+                      min={today}
+                      onChange={(e) => setHoldResume(e.target.value)}
+                    />
+                  </div>
+                </div>
+                <DialogFooter>
+                  <Button variant="ghost" onClick={() => setHoldOpen(false)}>Cancel</Button>
+                  <Button onClick={putOnHold} className="bg-gradient-primary text-primary-foreground">Put on hold</Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          )}
         </div>
         <h1 className="mt-4 font-display text-3xl font-bold">{sprint.title}</h1>
         {sprint.description && <p className="mt-2 text-muted-foreground">{sprint.description}</p>}
+        {sprint.status === "on_hold" && (
+          <div className="mt-4 rounded-xl border border-amber-500/40 bg-amber-500/10 p-4">
+            <div className="flex items-center gap-2">
+              <Badge variant="outline" className="border-amber-500/60 text-amber-600 dark:text-amber-400">
+                <Pause className="mr-1 h-3 w-3" /> On hold
+              </Badge>
+              {sprint.resume_date && (
+                <span className="text-sm text-muted-foreground">
+                  Resumes {new Date(sprint.resume_date + "T00:00:00").toLocaleDateString()}
+                </span>
+              )}
+            </div>
+            {sprint.hold_reason && (
+              <p className="mt-2 text-sm text-foreground/90"><span className="font-medium">Reason: </span>{sprint.hold_reason}</p>
+            )}
+          </div>
+        )}
+
         <div className="mt-6">
           <div className="flex items-center justify-between text-sm text-muted-foreground">
             <span>{done}/{milestones.length} milestones complete</span>
