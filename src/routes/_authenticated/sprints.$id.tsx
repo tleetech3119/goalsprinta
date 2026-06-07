@@ -98,7 +98,29 @@ function SprintDetail() {
     if (error) toast.error(error.message);
   };
 
+  const putOnHold = async () => {
+    if (!holdReason.trim()) return toast.error("Please add a reason for the hold.");
+    if (!holdResume) return toast.error("Please pick a resume date.");
+    const { error } = await supabase.from("sprints").update({
+      status: "on_hold", hold_reason: holdReason.trim(), resume_date: holdResume,
+    }).eq("id", id);
+    if (error) return toast.error(error.message);
+    setSprint((s) => s ? { ...s, status: "on_hold", hold_reason: holdReason.trim(), resume_date: holdResume } : s);
+    setHoldOpen(false);
+    toast.success("Sprint placed on hold.");
+  };
+
+  const resumeSprint = async () => {
+    const { error } = await supabase.from("sprints").update({
+      status: "active", hold_reason: null, resume_date: null,
+    }).eq("id", id);
+    if (error) return toast.error(error.message);
+    setSprint((s) => s ? { ...s, status: "active", hold_reason: null, resume_date: null } : s);
+    toast.success("Sprint resumed.");
+  };
+
   if (loading) return <div className="p-8 text-muted-foreground">Loading…</div>;
+
   if (!sprint) return <div className="p-8">Sprint not found. <Link to="/dashboard" className="text-primary underline">Back</Link></div>;
 
   const done = milestones.filter((m) => m.completed).length;
