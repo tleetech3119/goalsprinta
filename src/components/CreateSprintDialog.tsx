@@ -131,7 +131,7 @@ export function CreateSprintDialog({
               <div>
                 <button
                   type="button"
-                  onClick={() => { setSelectedTemplate(null); setTitle(""); setDescription(""); setEndDate(""); }}
+                  onClick={() => { setSelectedTemplate(null); setTitle(""); setDescription(""); setEndDate(""); setBudget({}); }}
                   className="mb-3 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
                 >
                   <ArrowLeft className="h-3.5 w-3.5" /> Back to templates
@@ -139,6 +139,36 @@ export function CreateSprintDialog({
                 <div className="mb-3 rounded-lg border border-border bg-muted/30 p-3 text-xs text-muted-foreground">
                   <span className="font-medium text-foreground">{selectedTemplate.emoji} {selectedTemplate.name}</span> — {selectedTemplate.milestones.length} milestones will be added automatically.
                 </div>
+
+                {selectedTemplate.budgetCategories && (
+                  <div className="mb-4 rounded-xl border border-border bg-card/60 p-4">
+                    <div className="flex items-center justify-between">
+                      <Label className="text-sm font-semibold">Budget calculator</Label>
+                      <span className="text-sm font-semibold text-primary">
+                        Total: ${budgetTotal.toLocaleString()}
+                      </span>
+                    </div>
+                    <p className="mt-1 text-xs text-muted-foreground">Adjust to your event — totals save into the sprint description.</p>
+                    <div className="mt-3 grid max-h-56 gap-2 overflow-y-auto pr-1 sm:grid-cols-2">
+                      {selectedTemplate.budgetCategories.map((c) => (
+                        <div key={c.label} className="flex items-center gap-2">
+                          <span className="flex-1 truncate text-xs">{c.label}</span>
+                          <div className="relative w-28">
+                            <span className="pointer-events-none absolute left-2 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">$</span>
+                            <Input
+                              type="number"
+                              min={0}
+                              value={budget[c.label] ?? 0}
+                              onChange={(e) => setBudget((b) => ({ ...b, [c.label]: Number(e.target.value) || 0 }))}
+                              className="h-8 pl-5 text-xs"
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 <SprintForm
                   title={title} setTitle={setTitle}
                   description={description} setDescription={setDescription}
