@@ -14,7 +14,7 @@ import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { useOnboarding } from "@/lib/onboarding-context";
 
-type Sprint = { id: string; title: string; description: string | null; end_date: string | null; status: string; hold_reason: string | null; resume_date: string | null };
+type Sprint = { id: string; title: string; description: string | null; start_date: string; end_date: string | null; status: string; hold_reason: string | null; resume_date: string | null };
 type Milestone = { id: string; title: string; completed: boolean; position: number; due_date: string | null };
 
 
@@ -95,6 +95,13 @@ function SprintDetail() {
   const setDueDate = async (mid: string, iso: string | null) => {
     setMilestones((arr) => arr.map((x) => x.id === mid ? { ...x, due_date: iso } : x));
     const { error } = await supabase.from("milestones").update({ due_date: iso }).eq("id", mid);
+    if (error) toast.error(error.message);
+  };
+
+  const updateSprintDate = async (field: "start_date" | "end_date", iso: string | null) => {
+    setSprint((s) => s ? { ...s, [field]: iso ?? (field === "start_date" ? todayInputValue() : null) } : s);
+    const update = field === "start_date" ? { start_date: iso ?? todayInputValue() } : { end_date: iso };
+    const { error } = await supabase.from("sprints").update(update as unknown as { start_date?: string; end_date?: string | null }).eq("id", id);
     if (error) toast.error(error.message);
   };
 
@@ -220,6 +227,26 @@ function SprintDetail() {
         </div>
         <h1 className="mt-4 font-display text-3xl font-bold">{sprint.title}</h1>
         {sprint.description && <p className="mt-2 text-muted-foreground">{sprint.description}</p>}
+        <div className="mt-4 flex flex-wrap items-center gap-4">
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-muted-foreground">Start</span>
+            <Input
+              type="date"
+              value={sprint.start_date}
+              onChange={(e) => updateSprintDate("start_date", e.target.value || todayInputValue())}
+              className="h-8 w-40 text-sm"
+            />
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-muted-foreground">Target</span>
+            <Input
+              type="date"
+              value={sprint.end_date ?? ""}
+              onChange={(e) => updateSprintDate("end_date", e.target.value || null)}
+              className="h-8 w-40 text-sm"
+            />
+          </div>
+        </div>
         {sprint.status === "on_hold" && (
           <div className="mt-4 rounded-xl border border-amber-500/40 bg-amber-500/10 p-4">
             <div className="flex items-center gap-2">
