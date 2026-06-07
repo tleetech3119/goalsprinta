@@ -12,6 +12,7 @@ type Sprint = { id: string; title: string; description: string | null; end_date:
 type Milestone = { id: string; title: string; completed: boolean; position: number };
 
 export const Route = createFileRoute("/_authenticated/sprints/$id")({
+  ssr: false,
   head: () => ({ meta: [{ title: "Sprint — Goal Sprinta" }] }),
   component: SprintDetail,
 });
