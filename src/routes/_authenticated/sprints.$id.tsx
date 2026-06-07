@@ -37,7 +37,10 @@ function SprintDetail() {
   const { state, refresh, update } = useOnboarding();
   const [sprint, setSprint] = useState<Sprint | null>(null);
   const [milestones, setMilestones] = useState<Milestone[]>([]);
+  const [rewards, setRewards] = useState<Reward[]>([]);
   const [newTitle, setNewTitle] = useState("");
+  const [rewardTitle, setRewardTitle] = useState("");
+  const [rewardDesc, setRewardDesc] = useState("");
   const [loading, setLoading] = useState(true);
   const [holdOpen, setHoldOpen] = useState(false);
   const [holdReason, setHoldReason] = useState("");
