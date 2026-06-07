@@ -78,6 +78,13 @@ function SprintDetail() {
     await refresh();
   };
 
+  const setDueDate = async (mid: string, date: Date | null) => {
+    const iso = date ? format(date, "yyyy-MM-dd") : null;
+    setMilestones((arr) => arr.map((x) => x.id === mid ? { ...x, due_date: iso } : x));
+    const { error } = await supabase.from("milestones").update({ due_date: iso }).eq("id", mid);
+    if (error) toast.error(error.message);
+  };
+
   if (loading) return <div className="p-8 text-muted-foreground">Loading…</div>;
   if (!sprint) return <div className="p-8">Sprint not found. <Link to="/dashboard" className="text-primary underline">Back</Link></div>;
 
