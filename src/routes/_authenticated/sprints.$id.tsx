@@ -134,11 +134,78 @@ function SprintDetail() {
       </Link>
 
       <div className="mt-6 rounded-3xl border border-border bg-card p-8 shadow-card">
-        <div className="grid h-12 w-12 place-items-center rounded-xl bg-gradient-primary text-primary-foreground shadow-glow">
-          <Target className="h-6 w-6" />
+        <div className="flex items-start justify-between gap-4">
+          <div className="grid h-12 w-12 place-items-center rounded-xl bg-gradient-primary text-primary-foreground shadow-glow">
+            <Target className="h-6 w-6" />
+          </div>
+          {sprint.status === "on_hold" ? (
+            <Button variant="outline" size="sm" onClick={resumeSprint}>
+              <Play className="mr-1 h-4 w-4" /> Resume
+            </Button>
+          ) : (
+            <Dialog open={holdOpen} onOpenChange={(o) => {
+              setHoldOpen(o);
+              if (o) { setHoldReason(sprint.hold_reason ?? ""); setHoldResume(sprint.resume_date ?? ""); }
+            }}>
+              <DialogTrigger asChild>
+                <Button variant="outline" size="sm">
+                  <Pause className="mr-1 h-4 w-4" /> Put on hold
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Put sprint on hold</DialogTitle>
+                  <DialogDescription>Tell us why you're pausing and when you plan to resume.</DialogDescription>
+                </DialogHeader>
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Reason for hold</label>
+                    <Textarea
+                      value={holdReason}
+                      onChange={(e) => setHoldReason(e.target.value)}
+                      placeholder="What's blocking you right now?"
+                      maxLength={500}
+                      rows={4}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Planned resume date</label>
+                    <Input
+                      type="date"
+                      value={holdResume}
+                      min={today}
+                      onChange={(e) => setHoldResume(e.target.value)}
+                    />
+                  </div>
+                </div>
+                <DialogFooter>
+                  <Button variant="ghost" onClick={() => setHoldOpen(false)}>Cancel</Button>
+                  <Button onClick={putOnHold} className="bg-gradient-primary text-primary-foreground">Put on hold</Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          )}
         </div>
         <h1 className="mt-4 font-display text-3xl font-bold">{sprint.title}</h1>
         {sprint.description && <p className="mt-2 text-muted-foreground">{sprint.description}</p>}
+        {sprint.status === "on_hold" && (
+          <div className="mt-4 rounded-xl border border-amber-500/40 bg-amber-500/10 p-4">
+            <div className="flex items-center gap-2">
+              <Badge variant="outline" className="border-amber-500/60 text-amber-600 dark:text-amber-400">
+                <Pause className="mr-1 h-3 w-3" /> On hold
+              </Badge>
+              {sprint.resume_date && (
+                <span className="text-sm text-muted-foreground">
+                  Resumes {new Date(sprint.resume_date + "T00:00:00").toLocaleDateString()}
+                </span>
+              )}
+            </div>
+            {sprint.hold_reason && (
+              <p className="mt-2 text-sm text-foreground/90"><span className="font-medium">Reason: </span>{sprint.hold_reason}</p>
+            )}
+          </div>
+        )}
+
         <div className="mt-6">
           <div className="flex items-center justify-between text-sm text-muted-foreground">
             <span>{done}/{milestones.length} milestones complete</span>
