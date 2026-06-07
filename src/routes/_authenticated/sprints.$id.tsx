@@ -186,7 +186,7 @@ function SprintDetail() {
   return (
     <div className="container mx-auto max-w-3xl px-6 py-8">
       <Link to="/dashboard" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
-        <ArrowLeft className="h-4 w-4" /> All sprints
+        <ArrowLeft className="h-4 w-4" /> Back
       </Link>
 
       <div className="mt-6 rounded-3xl border border-border bg-card p-8 shadow-card">

@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Plus, Target, ArrowRight, Calendar, Award, CheckCircle2, RotateCcw } from "lucide-react";
+import { Plus, Target, ArrowRight, Calendar, Award, CheckCircle2, RotateCcw, ArrowLeft } from "lucide-react";
 import { CreateSprintDialog } from "@/components/CreateSprintDialog";
 import { useOnboarding } from "@/lib/onboarding-context";
 import { toast } from "sonner";
