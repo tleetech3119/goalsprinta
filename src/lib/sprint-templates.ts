@@ -1,3 +1,5 @@
+export type BudgetCategory = { label: string; suggested: number };
+
 export type SprintTemplate = {
   id: string;
   name: string;
@@ -7,6 +9,7 @@ export type SprintTemplate = {
   description: string;
   durationDays: number;
   milestones: string[];
+  budgetCategories?: BudgetCategory[];
 };
 
 export const SPRINT_TEMPLATES: SprintTemplate[] = [
