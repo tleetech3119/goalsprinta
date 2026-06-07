@@ -4,16 +4,20 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
 import { ArrowLeft, Plus, Target, Trash2, CalendarIcon, X } from "lucide-react";
-import { format, isPast, isToday } from "date-fns";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { useOnboarding } from "@/lib/onboarding-context";
 
 type Sprint = { id: string; title: string; description: string | null; end_date: string | null };
 type Milestone = { id: string; title: string; completed: boolean; position: number; due_date: string | null };
+
+const todayInputValue = () => {
+  const today = new Date();
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+  const day = String(today.getDate()).padStart(2, "0");
+  return `${today.getFullYear()}-${month}-${day}`;
+};
 
 export const Route = createFileRoute("/_authenticated/sprints/$id")({
   ssr: false,
@@ -78,8 +82,7 @@ function SprintDetail() {
     await refresh();
   };
 
-  const setDueDate = async (mid: string, date: Date | null) => {
-    const iso = date ? format(date, "yyyy-MM-dd") : null;
+  const setDueDate = async (mid: string, iso: string | null) => {
     setMilestones((arr) => arr.map((x) => x.id === mid ? { ...x, due_date: iso } : x));
     const { error } = await supabase.from("milestones").update({ due_date: iso }).eq("id", mid);
     if (error) toast.error(error.message);
@@ -90,6 +93,7 @@ function SprintDetail() {
 
   const done = milestones.filter((m) => m.completed).length;
   const pct = milestones.length ? (done / milestones.length) * 100 : 0;
+  const today = todayInputValue();
 
   return (
     <div className="container mx-auto max-w-3xl px-6 py-8">
@@ -127,53 +131,38 @@ function SprintDetail() {
             </li>
           )}
           {milestones.map((m) => {
-            const due = m.due_date ? new Date(`${m.due_date}T00:00:00`) : null;
-            const overdue = due && !m.completed && isPast(due) && !isToday(due);
-            const dueToday = due && !m.completed && isToday(due);
+            const overdue = m.due_date && !m.completed && m.due_date < today;
+            const dueToday = m.due_date && !m.completed && m.due_date === today;
             return (
               <li key={m.id} className="flex items-center gap-3 rounded-xl border border-border bg-card p-3">
                 <Checkbox checked={m.completed} onCheckedChange={() => toggle(m)} />
                 <span className={m.completed ? "flex-1 text-muted-foreground line-through" : "flex-1"}>{m.title}</span>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
+                <div
+                  className={cn(
+                    "flex items-center gap-1 rounded-md border border-input bg-background px-2 py-1",
+                    overdue && "border-destructive text-destructive",
+                    dueToday && "border-primary text-primary",
+                  )}
+                >
+                  <CalendarIcon className="h-3.5 w-3.5 shrink-0" />
+                  <Input
+                    type="date"
+                    aria-label={`Due date for ${m.title}`}
+                    value={m.due_date ?? ""}
+                    onChange={(e) => setDueDate(m.id, e.target.value || null)}
+                    className="h-7 w-32 border-0 bg-transparent p-0 text-xs shadow-none focus-visible:ring-0"
+                  />
+                  {m.due_date && (
+                    <button
                       type="button"
-                      variant="ghost"
-                      size="sm"
-                      className={cn(
-                        "h-8 gap-1.5 px-2 text-xs font-normal",
-                        !due && "text-muted-foreground",
-                        overdue && "text-destructive",
-                        dueToday && "text-primary",
-                      )}
+                      onClick={() => setDueDate(m.id, null)}
+                      className="rounded p-0.5 text-muted-foreground hover:bg-muted hover:text-foreground"
+                      aria-label={`Clear due date for ${m.title}`}
                     >
-                      <CalendarIcon className="h-3.5 w-3.5" />
-                      {due ? format(due, "MMM d") : "Add date"}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="end">
-                    <Calendar
-                      mode="single"
-                      selected={due ?? undefined}
-                      onSelect={(d) => setDueDate(m.id, d ?? null)}
-                      initialFocus
-                      className={cn("p-3 pointer-events-auto")}
-                    />
-                    {due && (
-                      <div className="border-t border-border p-2">
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => setDueDate(m.id, null)}
-                          className="w-full justify-start text-xs text-muted-foreground"
-                        >
-                          <X className="mr-1.5 h-3.5 w-3.5" /> Clear date
-                        </Button>
-                      </div>
-                    )}
-                  </PopoverContent>
-                </Popover>
+                      <X className="h-3.5 w-3.5" />
+                    </button>
+                  )}
+                </div>
                 <button onClick={() => remove(m.id)} className="rounded p-1.5 text-muted-foreground hover:bg-muted hover:text-destructive">
                   <Trash2 className="h-4 w-4" />
                 </button>
