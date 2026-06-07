@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogTrigger,
 } from "@/components/ui/dialog";
-import { ArrowLeft, Plus, Target, Trash2, CalendarIcon, X, Pause, Play } from "lucide-react";
+import { ArrowLeft, Plus, Target, Trash2, CalendarIcon, X, Pause, Play, CheckCircle2, RotateCcw } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { useOnboarding } from "@/lib/onboarding-context";
@@ -119,6 +119,24 @@ function SprintDetail() {
     toast.success("Sprint resumed.");
   };
 
+  const completeSprint = async () => {
+    const { error } = await supabase.from("sprints").update({
+      status: "completed", completed_at: new Date().toISOString(), hold_reason: null, resume_date: null,
+    }).eq("id", id);
+    if (error) return toast.error(error.message);
+    setSprint((s) => s ? { ...s, status: "completed", hold_reason: null, resume_date: null } : s);
+    toast.success("Sprint moved to Wins. 🎉");
+  };
+
+  const reopenSprint = async () => {
+    const { error } = await supabase.from("sprints").update({
+      status: "active", completed_at: null,
+    }).eq("id", id);
+    if (error) return toast.error(error.message);
+    setSprint((s) => s ? { ...s, status: "active" } : s);
+    toast.success("Sprint reopened.");
+  };
+
   if (loading) return <div className="p-8 text-muted-foreground">Loading…</div>;
 
   if (!sprint) return <div className="p-8">Sprint not found. <Link to="/dashboard" className="text-primary underline">Back</Link></div>;
@@ -138,53 +156,67 @@ function SprintDetail() {
           <div className="grid h-12 w-12 place-items-center rounded-xl bg-gradient-primary text-primary-foreground shadow-glow">
             <Target className="h-6 w-6" />
           </div>
-          {sprint.status === "on_hold" ? (
-            <Button variant="outline" size="sm" onClick={resumeSprint}>
-              <Play className="mr-1 h-4 w-4" /> Resume
-            </Button>
-          ) : (
-            <Dialog open={holdOpen} onOpenChange={(o) => {
-              setHoldOpen(o);
-              if (o) { setHoldReason(sprint.hold_reason ?? ""); setHoldResume(sprint.resume_date ?? ""); }
-            }}>
-              <DialogTrigger asChild>
-                <Button variant="outline" size="sm">
-                  <Pause className="mr-1 h-4 w-4" /> Put on hold
+          <div className="flex flex-wrap items-center gap-2">
+            {sprint.status === "completed" ? (
+              <Button variant="outline" size="sm" onClick={reopenSprint}>
+                <RotateCcw className="mr-1 h-4 w-4" /> Reopen
+              </Button>
+            ) : (
+              <>
+                {sprint.status === "on_hold" ? (
+                  <Button variant="outline" size="sm" onClick={resumeSprint}>
+                    <Play className="mr-1 h-4 w-4" /> Resume
+                  </Button>
+                ) : (
+                  <Dialog open={holdOpen} onOpenChange={(o) => {
+                    setHoldOpen(o);
+                    if (o) { setHoldReason(sprint.hold_reason ?? ""); setHoldResume(sprint.resume_date ?? ""); }
+                  }}>
+                    <DialogTrigger asChild>
+                      <Button variant="outline" size="sm">
+                        <Pause className="mr-1 h-4 w-4" /> Put on hold
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Put sprint on hold</DialogTitle>
+                        <DialogDescription>Tell us why you're pausing and when you plan to resume.</DialogDescription>
+                      </DialogHeader>
+                      <div className="space-y-4">
+                        <div className="space-y-2">
+                          <label className="text-sm font-medium">Reason for hold</label>
+                          <Textarea
+                            value={holdReason}
+                            onChange={(e) => setHoldReason(e.target.value)}
+                            placeholder="What's blocking you right now?"
+                            maxLength={500}
+                            rows={4}
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <label className="text-sm font-medium">Planned resume date</label>
+                          <Input
+                            type="date"
+                            value={holdResume}
+                            min={today}
+                            onChange={(e) => setHoldResume(e.target.value)}
+                          />
+                        </div>
+                      </div>
+                      <DialogFooter>
+                        <Button variant="ghost" onClick={() => setHoldOpen(false)}>Cancel</Button>
+                        <Button onClick={putOnHold} className="bg-gradient-primary text-primary-foreground">Put on hold</Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
+                )}
+                <Button size="sm" onClick={completeSprint} className="bg-gradient-primary text-primary-foreground">
+                  <CheckCircle2 className="mr-1 h-4 w-4" /> Mark complete
                 </Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Put sprint on hold</DialogTitle>
-                  <DialogDescription>Tell us why you're pausing and when you plan to resume.</DialogDescription>
-                </DialogHeader>
-                <div className="space-y-4">
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Reason for hold</label>
-                    <Textarea
-                      value={holdReason}
-                      onChange={(e) => setHoldReason(e.target.value)}
-                      placeholder="What's blocking you right now?"
-                      maxLength={500}
-                      rows={4}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Planned resume date</label>
-                    <Input
-                      type="date"
-                      value={holdResume}
-                      min={today}
-                      onChange={(e) => setHoldResume(e.target.value)}
-                    />
-                  </div>
-                </div>
-                <DialogFooter>
-                  <Button variant="ghost" onClick={() => setHoldOpen(false)}>Cancel</Button>
-                  <Button onClick={putOnHold} className="bg-gradient-primary text-primary-foreground">Put on hold</Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
-          )}
+              </>
+            )}
+          </div>
+
         </div>
         <h1 className="mt-4 font-display text-3xl font-bold">{sprint.title}</h1>
         {sprint.description && <p className="mt-2 text-muted-foreground">{sprint.description}</p>}

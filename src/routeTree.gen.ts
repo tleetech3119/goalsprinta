@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedWinsRouteImport } from './routes/_authenticated/wins'
 import { Route as AuthenticatedRewardsRouteImport } from './routes/_authenticated/rewards'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedAffirmationsRouteImport } from './routes/_authenticated/affirmations'
@@ -30,6 +31,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedWinsRoute = AuthenticatedWinsRouteImport.update({
+  id: '/wins',
+  path: '/wins',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedRewardsRoute = AuthenticatedRewardsRouteImport.update({
   id: '/rewards',
@@ -59,6 +65,7 @@ export interface FileRoutesByFullPath {
   '/affirmations': typeof AuthenticatedAffirmationsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/rewards': typeof AuthenticatedRewardsRoute
+  '/wins': typeof AuthenticatedWinsRoute
   '/sprints/$id': typeof AuthenticatedSprintsIdRoute
 }
 export interface FileRoutesByTo {
@@ -67,6 +74,7 @@ export interface FileRoutesByTo {
   '/affirmations': typeof AuthenticatedAffirmationsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/rewards': typeof AuthenticatedRewardsRoute
+  '/wins': typeof AuthenticatedWinsRoute
   '/sprints/$id': typeof AuthenticatedSprintsIdRoute
 }
 export interface FileRoutesById {
@@ -77,6 +85,7 @@ export interface FileRoutesById {
   '/_authenticated/affirmations': typeof AuthenticatedAffirmationsRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/rewards': typeof AuthenticatedRewardsRoute
+  '/_authenticated/wins': typeof AuthenticatedWinsRoute
   '/_authenticated/sprints/$id': typeof AuthenticatedSprintsIdRoute
 }
 export interface FileRouteTypes {
@@ -87,6 +96,7 @@ export interface FileRouteTypes {
     | '/affirmations'
     | '/dashboard'
     | '/rewards'
+    | '/wins'
     | '/sprints/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -95,6 +105,7 @@ export interface FileRouteTypes {
     | '/affirmations'
     | '/dashboard'
     | '/rewards'
+    | '/wins'
     | '/sprints/$id'
   id:
     | '__root__'
@@ -104,6 +115,7 @@ export interface FileRouteTypes {
     | '/_authenticated/affirmations'
     | '/_authenticated/dashboard'
     | '/_authenticated/rewards'
+    | '/_authenticated/wins'
     | '/_authenticated/sprints/$id'
   fileRoutesById: FileRoutesById
 }
@@ -135,6 +147,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/wins': {
+      id: '/_authenticated/wins'
+      path: '/wins'
+      fullPath: '/wins'
+      preLoaderRoute: typeof AuthenticatedWinsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/rewards': {
       id: '/_authenticated/rewards'
@@ -171,6 +190,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAffirmationsRoute: typeof AuthenticatedAffirmationsRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedRewardsRoute: typeof AuthenticatedRewardsRoute
+  AuthenticatedWinsRoute: typeof AuthenticatedWinsRoute
   AuthenticatedSprintsIdRoute: typeof AuthenticatedSprintsIdRoute
 }
 
@@ -178,6 +198,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAffirmationsRoute: AuthenticatedAffirmationsRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedRewardsRoute: AuthenticatedRewardsRoute,
+  AuthenticatedWinsRoute: AuthenticatedWinsRoute,
   AuthenticatedSprintsIdRoute: AuthenticatedSprintsIdRoute,
 }
 

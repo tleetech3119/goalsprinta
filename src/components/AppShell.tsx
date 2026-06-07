@@ -1,6 +1,6 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { type ReactNode } from "react";
-import { LayoutDashboard, Trophy, Sparkles, LogOut, Zap } from "lucide-react";
+import { LayoutDashboard, Trophy, Sparkles, LogOut, Zap, Award } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { OnboardingProvider } from "@/lib/onboarding-context";
@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 
 const nav = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard, tour: "create-sprint" as const },
+  { to: "/wins", label: "Wins", icon: Award },
   { to: "/rewards", label: "Rewards", icon: Trophy, tour: "rewards" as const },
   { to: "/affirmations", label: "Affirmations", icon: Sparkles },
 ];
