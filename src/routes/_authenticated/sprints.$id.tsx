@@ -4,12 +4,16 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ArrowLeft, Plus, Target, Trash2 } from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { ArrowLeft, Plus, Target, Trash2, CalendarIcon, X } from "lucide-react";
+import { format, isPast, isToday } from "date-fns";
+import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { useOnboarding } from "@/lib/onboarding-context";
 
 type Sprint = { id: string; title: string; description: string | null; end_date: string | null };
-type Milestone = { id: string; title: string; completed: boolean; position: number };
+type Milestone = { id: string; title: string; completed: boolean; position: number; due_date: string | null };
 
 export const Route = createFileRoute("/_authenticated/sprints/$id")({
   ssr: false,
