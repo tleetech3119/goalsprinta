@@ -100,8 +100,10 @@ function SprintDetail() {
 
   const updateSprintDate = async (field: "start_date" | "end_date", iso: string | null) => {
     setSprint((s) => s ? { ...s, [field]: iso ?? (field === "start_date" ? todayInputValue() : null) } : s);
-    const update = field === "start_date" ? { start_date: iso } : { end_date: iso };
-    const { error } = await supabase.from("sprints").update(update).eq("id", id);
+    const update = field === "start_date"
+      ? { start_date: iso ?? todayInputValue() }
+      : { end_date: iso } as { end_date: string | null };
+    const { error } = await supabase.from("sprints").update(update as Record<string, unknown>).eq("id", id);
     if (error) toast.error(error.message);
   };
 
