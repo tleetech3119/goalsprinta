@@ -21,10 +21,11 @@ export function CreateSprintDialog({
   const [tab, setTab] = useState<"blank" | "templates">("blank");
   const [selectedTemplate, setSelectedTemplate] = useState<SprintTemplate | null>(null);
   const [budget, setBudget] = useState<Record<string, number>>({});
+  const [selectedMilestones, setSelectedMilestones] = useState<Set<number>>(new Set());
 
   const reset = () => {
     setTitle(""); setDescription(""); setEndDate("");
-    setSelectedTemplate(null); setTab("blank"); setBudget({});
+    setSelectedTemplate(null); setTab("blank"); setBudget({}); setSelectedMilestones(new Set());
   };
 
   const pickTemplate = (t: SprintTemplate) => {
@@ -41,6 +42,15 @@ export function CreateSprintDialog({
     } else {
       setBudget({});
     }
+    setSelectedMilestones(new Set(t.milestones.map((_, i) => i)));
+  };
+
+  const toggleMilestone = (i: number) => {
+    setSelectedMilestones((prev) => {
+      const next = new Set(prev);
+      if (next.has(i)) next.delete(i); else next.add(i);
+      return next;
+    });
   };
 
   const budgetTotal = Object.values(budget).reduce((s, n) => s + (Number.isFinite(n) ? n : 0), 0);
@@ -67,11 +77,16 @@ export function CreateSprintDialog({
     if (error) { setLoading(false); return toast.error(error.message); }
 
     if (selectedTemplate) {
-      const rows = selectedTemplate.milestones.map((m, i) => ({
-        sprint_id: data!.id, user_id: userId, title: m, position: i,
-      }));
-      const { error: mErr } = await supabase.from("milestones").insert(rows);
-      if (mErr) toast.error(`Sprint created, but milestones failed: ${mErr.message}`);
+      const picked = selectedTemplate.milestones
+        .map((m, i) => ({ m, i }))
+        .filter(({ i }) => selectedMilestones.has(i));
+      if (picked.length > 0) {
+        const rows = picked.map(({ m }, idx) => ({
+          sprint_id: data!.id, user_id: userId, title: m, position: idx,
+        }));
+        const { error: mErr } = await supabase.from("milestones").insert(rows);
+        if (mErr) toast.error(`Sprint created, but milestones failed: ${mErr.message}`);
+      }
     }
 
     setLoading(false);
