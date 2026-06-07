@@ -161,7 +161,9 @@ export type Database = {
           created_at: string
           description: string | null
           end_date: string | null
+          hold_reason: string | null
           id: string
+          resume_date: string | null
           start_date: string
           status: string
           title: string
@@ -172,7 +174,9 @@ export type Database = {
           created_at?: string
           description?: string | null
           end_date?: string | null
+          hold_reason?: string | null
           id?: string
+          resume_date?: string | null
           start_date?: string
           status?: string
           title: string
@@ -183,7 +187,9 @@ export type Database = {
           created_at?: string
           description?: string | null
           end_date?: string | null
+          hold_reason?: string | null
           id?: string
+          resume_date?: string | null
           start_date?: string
           status?: string
           title?: string
