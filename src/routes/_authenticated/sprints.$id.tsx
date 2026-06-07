@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogTrigger,
 } from "@/components/ui/dialog";
-import { ArrowLeft, Plus, Target, Trash2, CalendarIcon, X, Pause, Play } from "lucide-react";
+import { ArrowLeft, Plus, Target, Trash2, CalendarIcon, X, Pause, Play, CheckCircle2, RotateCcw } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { useOnboarding } from "@/lib/onboarding-context";
