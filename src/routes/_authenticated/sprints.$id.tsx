@@ -98,6 +98,12 @@ function SprintDetail() {
     if (error) toast.error(error.message);
   };
 
+  const updateSprintDate = async (field: "start_date" | "end_date", iso: string | null) => {
+    setSprint((s) => s ? { ...s, [field]: iso ?? (field === "start_date" ? todayInputValue() : null) } : s);
+    const { error } = await supabase.from("sprints").update({ [field]: iso }).eq("id", id);
+    if (error) toast.error(error.message);
+  };
+
   const putOnHold = async () => {
     if (!holdReason.trim()) return toast.error("Please add a reason for the hold.");
     if (!holdResume) return toast.error("Please pick a resume date.");
