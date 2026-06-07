@@ -1,0 +1,130 @@
+import { createFileRoute, Link, useParams } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
+import { ArrowLeft, Plus, Target, Trash2 } from "lucide-react";
+import { toast } from "sonner";
+import { useOnboarding } from "@/lib/onboarding-context";
+
+type Sprint = { id: string; title: string; description: string | null; end_date: string | null };
+type Milestone = { id: string; title: string; completed: boolean; position: number };
+
+export const Route = createFileRoute("/_authenticated/sprints/$id")({
+  head: () => ({ meta: [{ title: "Sprint — Goal Sprinta" }] }),
+  component: SprintDetail,
+});
+
+function SprintDetail() {
+  const { id } = useParams({ from: "/_authenticated/sprints/$id" });
+  const { state, refresh, update } = useOnboarding();
+  const [sprint, setSprint] = useState<Sprint | null>(null);
+  const [milestones, setMilestones] = useState<Milestone[]>([]);
+  const [newTitle, setNewTitle] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  const load = async () => {
+    setLoading(true);
+    const [{ data: s }, { data: ms }] = await Promise.all([
+      supabase.from("sprints").select("*").eq("id", id).maybeSingle(),
+      supabase.from("milestones").select("*").eq("sprint_id", id).order("position", { ascending: true }).order("created_at", { ascending: true }),
+    ]);
+    setSprint(s as Sprint | null);
+    setMilestones((ms ?? []) as Milestone[]);
+    setLoading(false);
+  };
+
+  useEffect(() => { load(); }, [id]);
+
+  const addMilestone = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newTitle.trim()) return;
+    const { data: userData } = await supabase.auth.getUser();
+    const { data, error } = await supabase.from("milestones").insert({
+      sprint_id: id, user_id: userData.user!.id, title: newTitle.trim(),
+      position: milestones.length,
+    }).select().single();
+    if (error) return toast.error(error.message);
+    setMilestones((m) => [...m, data as Milestone]);
+    setNewTitle("");
+    await refresh();
+  };
+
+  const toggle = async (m: Milestone) => {
+    const next = !m.completed;
+    setMilestones((arr) => arr.map((x) => x.id === m.id ? { ...x, completed: next } : x));
+    const { error } = await supabase.from("milestones").update({
+      completed: next, completed_at: next ? new Date().toISOString() : null,
+    }).eq("id", m.id);
+    if (error) { toast.error(error.message); return; }
+    if (next && state && !state.first_milestone_celebrated) {
+      window.sessionStorage.setItem("gs-first-win", "1");
+      window.dispatchEvent(new Event("goal-sprinta:first-milestone-complete"));
+      // force re-render
+      window.dispatchEvent(new Event("storage"));
+      await update({ first_milestone_celebrated: true });
+    }
+  };
+
+  const remove = async (mid: string) => {
+    setMilestones((arr) => arr.filter((x) => x.id !== mid));
+    await supabase.from("milestones").delete().eq("id", mid);
+    await refresh();
+  };
+
+  if (loading) return <div className="p-8 text-muted-foreground">Loading…</div>;
+  if (!sprint) return <div className="p-8">Sprint not found. <Link to="/dashboard" className="text-primary underline">Back</Link></div>;
+
+  const done = milestones.filter((m) => m.completed).length;
+  const pct = milestones.length ? (done / milestones.length) * 100 : 0;
+
+  return (
+    <div className="container mx-auto max-w-3xl px-6 py-8">
+      <Link to="/dashboard" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
+        <ArrowLeft className="h-4 w-4" /> All sprints
+      </Link>
+
+      <div className="mt-6 rounded-3xl border border-border bg-card p-8 shadow-card">
+        <div className="grid h-12 w-12 place-items-center rounded-xl bg-gradient-primary text-primary-foreground shadow-glow">
+          <Target className="h-6 w-6" />
+        </div>
+        <h1 className="mt-4 font-display text-3xl font-bold">{sprint.title}</h1>
+        {sprint.description && <p className="mt-2 text-muted-foreground">{sprint.description}</p>}
+        <div className="mt-6">
+          <div className="flex items-center justify-between text-sm text-muted-foreground">
+            <span>{done}/{milestones.length} milestones complete</span>
+            <span>{Math.round(pct)}%</span>
+          </div>
+          <div className="mt-2 h-2 rounded-full bg-muted">
+            <div className="h-full rounded-full bg-gradient-primary transition-all" style={{ width: `${pct}%` }} />
+          </div>
+        </div>
+      </div>
+
+      <div data-tour="milestone-tracker" className="mt-8">
+        <h2 className="font-display text-xl font-semibold">Milestones</h2>
+        <form onSubmit={addMilestone} className="mt-4 flex gap-2">
+          <Input value={newTitle} onChange={(e) => setNewTitle(e.target.value)} placeholder="Add a milestone…" />
+          <Button type="submit" className="bg-gradient-primary text-primary-foreground"><Plus className="h-4 w-4" /></Button>
+        </form>
+        <ul className="mt-4 space-y-2">
+          {milestones.length === 0 && (
+            <li className="rounded-xl border border-dashed border-border bg-card/40 p-6 text-center text-sm text-muted-foreground">
+              No milestones yet — add one to start tracking progress.
+            </li>
+          )}
+          {milestones.map((m) => (
+            <li key={m.id} className="flex items-center gap-3 rounded-xl border border-border bg-card p-3">
+              <Checkbox checked={m.completed} onCheckedChange={() => toggle(m)} />
+              <span className={m.completed ? "flex-1 text-muted-foreground line-through" : "flex-1"}>{m.title}</span>
+              <button onClick={() => remove(m.id)} className="rounded p-1.5 text-muted-foreground hover:bg-muted hover:text-destructive">
+                <Trash2 className="h-4 w-4" />
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+}
