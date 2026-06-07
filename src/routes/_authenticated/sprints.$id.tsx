@@ -119,6 +119,24 @@ function SprintDetail() {
     toast.success("Sprint resumed.");
   };
 
+  const completeSprint = async () => {
+    const { error } = await supabase.from("sprints").update({
+      status: "completed", completed_at: new Date().toISOString(), hold_reason: null, resume_date: null,
+    }).eq("id", id);
+    if (error) return toast.error(error.message);
+    setSprint((s) => s ? { ...s, status: "completed", hold_reason: null, resume_date: null } : s);
+    toast.success("Sprint moved to Wins. 🎉");
+  };
+
+  const reopenSprint = async () => {
+    const { error } = await supabase.from("sprints").update({
+      status: "active", completed_at: null,
+    }).eq("id", id);
+    if (error) return toast.error(error.message);
+    setSprint((s) => s ? { ...s, status: "active" } : s);
+    toast.success("Sprint reopened.");
+  };
+
   if (loading) return <div className="p-8 text-muted-foreground">Loading…</div>;
 
   if (!sprint) return <div className="p-8">Sprint not found. <Link to="/dashboard" className="text-primary underline">Back</Link></div>;
