@@ -360,6 +360,41 @@ function SprintDetail() {
           })}
         </ul>
       </div>
+
+      <div className="mt-8">
+        <div className="flex items-center gap-2">
+          <Trophy className="h-5 w-5 text-primary" />
+          <h2 className="font-display text-xl font-semibold">Rewards</h2>
+        </div>
+        <p className="mt-1 text-sm text-muted-foreground">Pick a reward to motivate this sprint.</p>
+        <form onSubmit={addReward} className="mt-4 grid gap-2 sm:grid-cols-[1fr_1.5fr_auto]">
+          <Input value={rewardTitle} onChange={(e) => setRewardTitle(e.target.value)} placeholder="Reward (e.g. weekend trip)" />
+          <Input value={rewardDesc} onChange={(e) => setRewardDesc(e.target.value)} placeholder="Why this one? (optional)" />
+          <Button type="submit" className="bg-gradient-primary text-primary-foreground"><Plus className="h-4 w-4" /></Button>
+        </form>
+        <ul className="mt-4 space-y-2">
+          {rewards.length === 0 && (
+            <li className="rounded-xl border border-dashed border-border bg-card/40 p-6 text-center text-sm text-muted-foreground">
+              No rewards yet — add one to celebrate finishing this sprint.
+            </li>
+          )}
+          {rewards.map((r) => (
+            <li key={r.id} className={cn("flex items-center gap-3 rounded-xl border border-border bg-card p-3", r.claimed && "opacity-70")}>
+              <div className="grid h-8 w-8 place-items-center rounded-md bg-accent/40 text-primary"><Trophy className="h-4 w-4" /></div>
+              <div className="flex-1">
+                <div className={cn("font-medium", r.claimed && "line-through text-muted-foreground")}>{r.title}</div>
+                {r.description && <div className="text-xs text-muted-foreground">{r.description}</div>}
+              </div>
+              <Button variant={r.claimed ? "secondary" : "default"} size="sm" onClick={() => toggleReward(r)} className={cn(!r.claimed && "bg-gradient-primary text-primary-foreground")}>
+                <Check className="mr-1 h-3 w-3" />{r.claimed ? "Claimed" : "Claim"}
+              </Button>
+              <button onClick={() => removeReward(r.id)} className="rounded p-1.5 text-muted-foreground hover:bg-muted hover:text-destructive">
+                <Trash2 className="h-4 w-4" />
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }
