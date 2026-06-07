@@ -147,14 +147,48 @@ export function CreateSprintDialog({
               <div>
                 <button
                   type="button"
-                  onClick={() => { setSelectedTemplate(null); setTitle(""); setDescription(""); setEndDate(""); setBudget({}); }}
+                  onClick={() => { setSelectedTemplate(null); setTitle(""); setDescription(""); setEndDate(""); setBudget({}); setSelectedMilestones(new Set()); }}
                   className="mb-3 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
                 >
                   <ArrowLeft className="h-3.5 w-3.5" /> Back to templates
                 </button>
                 <div className="mb-3 rounded-lg border border-border bg-muted/30 p-3 text-xs text-muted-foreground">
-                  <span className="font-medium text-foreground">{selectedTemplate.emoji} {selectedTemplate.name}</span> — {selectedTemplate.milestones.length} milestones will be added automatically.
+                  <span className="font-medium text-foreground">{selectedTemplate.emoji} {selectedTemplate.name}</span> — pick which milestones to include below.
                 </div>
+
+                <div className="mb-4 rounded-xl border border-border bg-card/60 p-4">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-sm font-semibold">Built-in milestones</Label>
+                    <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                      <span>{selectedMilestones.size} / {selectedTemplate.milestones.length} selected</span>
+                      <button
+                        type="button"
+                        onClick={() => setSelectedMilestones(
+                          selectedMilestones.size === selectedTemplate.milestones.length
+                            ? new Set()
+                            : new Set(selectedTemplate.milestones.map((_, i) => i))
+                        )}
+                        className="text-primary hover:underline"
+                      >
+                        {selectedMilestones.size === selectedTemplate.milestones.length ? "Clear all" : "Select all"}
+                      </button>
+                    </div>
+                  </div>
+                  <p className="mt-1 text-xs text-muted-foreground">Uncheck any you don't want added to your sprint.</p>
+                  <div className="mt-3 grid max-h-56 gap-2 overflow-y-auto pr-1">
+                    {selectedTemplate.milestones.map((m, i) => (
+                      <label key={i} className="flex cursor-pointer items-start gap-2 rounded-md p-1.5 text-sm hover:bg-muted/40">
+                        <Checkbox
+                          checked={selectedMilestones.has(i)}
+                          onCheckedChange={() => toggleMilestone(i)}
+                          className="mt-0.5"
+                        />
+                        <span className={selectedMilestones.has(i) ? "" : "text-muted-foreground line-through"}>{m}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
 
                 {selectedTemplate.budgetCategories && (
                   <div className="mb-4 rounded-xl border border-border bg-card/60 p-4">
