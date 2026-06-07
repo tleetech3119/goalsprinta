@@ -28,7 +28,7 @@ function Dashboard() {
     setLoading(true);
     const { data: userData } = await supabase.auth.getUser();
     if (!userData.user) return;
-    const { data: ss, error } = await supabase.from("sprints").select("*").eq("user_id", userData.user.id).order("created_at", { ascending: false });
+    const { data: ss, error } = await supabase.from("sprints").select("*").eq("user_id", userData.user.id).neq("status", "completed").order("created_at", { ascending: false });
     if (error) { toast.error(error.message); setLoading(false); return; }
     setSprints((ss ?? []) as Sprint[]);
     if (ss?.length) {
