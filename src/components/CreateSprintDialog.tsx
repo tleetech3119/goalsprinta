@@ -19,10 +19,11 @@ export function CreateSprintDialog({
   const [loading, setLoading] = useState(false);
   const [tab, setTab] = useState<"blank" | "templates">("blank");
   const [selectedTemplate, setSelectedTemplate] = useState<SprintTemplate | null>(null);
+  const [budget, setBudget] = useState<Record<string, number>>({});
 
   const reset = () => {
     setTitle(""); setDescription(""); setEndDate("");
-    setSelectedTemplate(null); setTab("blank");
+    setSelectedTemplate(null); setTab("blank"); setBudget({});
   };
 
   const pickTemplate = (t: SprintTemplate) => {
@@ -32,7 +33,16 @@ export function CreateSprintDialog({
     const d = new Date();
     d.setDate(d.getDate() + t.durationDays);
     setEndDate(d.toISOString().slice(0, 10));
+    if (t.budgetCategories) {
+      const init: Record<string, number> = {};
+      t.budgetCategories.forEach((c) => { init[c.label] = c.suggested; });
+      setBudget(init);
+    } else {
+      setBudget({});
+    }
   };
+
+  const budgetTotal = Object.values(budget).reduce((s, n) => s + (Number.isFinite(n) ? n : 0), 0);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,8 +50,17 @@ export function CreateSprintDialog({
     const { data: userData } = await supabase.auth.getUser();
     if (!userData.user) { setLoading(false); return; }
     const userId = userData.user.id;
+
+    let finalDescription = description || "";
+    if (selectedTemplate?.budgetCategories) {
+      const lines = selectedTemplate.budgetCategories
+        .map((c) => `• ${c.label}: $${(budget[c.label] ?? 0).toLocaleString()}`)
+        .join("\n");
+      finalDescription = `${finalDescription}\n\nBudget breakdown (Total: $${budgetTotal.toLocaleString()}):\n${lines}`.trim();
+    }
+
     const { data, error } = await supabase.from("sprints").insert({
-      user_id: userId, title, description: description || null,
+      user_id: userId, title, description: finalDescription || null,
       end_date: endDate || null,
     }).select().single();
     if (error) { setLoading(false); return toast.error(error.message); }
@@ -112,7 +131,7 @@ export function CreateSprintDialog({
               <div>
                 <button
                   type="button"
-                  onClick={() => { setSelectedTemplate(null); setTitle(""); setDescription(""); setEndDate(""); }}
+                  onClick={() => { setSelectedTemplate(null); setTitle(""); setDescription(""); setEndDate(""); setBudget({}); }}
                   className="mb-3 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
                 >
                   <ArrowLeft className="h-3.5 w-3.5" /> Back to templates
@@ -120,6 +139,36 @@ export function CreateSprintDialog({
                 <div className="mb-3 rounded-lg border border-border bg-muted/30 p-3 text-xs text-muted-foreground">
                   <span className="font-medium text-foreground">{selectedTemplate.emoji} {selectedTemplate.name}</span> — {selectedTemplate.milestones.length} milestones will be added automatically.
                 </div>
+
+                {selectedTemplate.budgetCategories && (
+                  <div className="mb-4 rounded-xl border border-border bg-card/60 p-4">
+                    <div className="flex items-center justify-between">
+                      <Label className="text-sm font-semibold">Budget calculator</Label>
+                      <span className="text-sm font-semibold text-primary">
+                        Total: ${budgetTotal.toLocaleString()}
+                      </span>
+                    </div>
+                    <p className="mt-1 text-xs text-muted-foreground">Adjust to your event — totals save into the sprint description.</p>
+                    <div className="mt-3 grid max-h-56 gap-2 overflow-y-auto pr-1 sm:grid-cols-2">
+                      {selectedTemplate.budgetCategories.map((c) => (
+                        <div key={c.label} className="flex items-center gap-2">
+                          <span className="flex-1 truncate text-xs">{c.label}</span>
+                          <div className="relative w-28">
+                            <span className="pointer-events-none absolute left-2 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">$</span>
+                            <Input
+                              type="number"
+                              min={0}
+                              value={budget[c.label] ?? 0}
+                              onChange={(e) => setBudget((b) => ({ ...b, [c.label]: Number(e.target.value) || 0 }))}
+                              className="h-8 pl-5 text-xs"
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 <SprintForm
                   title={title} setTitle={setTitle}
                   description={description} setDescription={setDescription}
