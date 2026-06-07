@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import { Zap } from "lucide-react";
 
 export const Route = createFileRoute("/auth")({
+  ssr: false,
   head: () => ({ meta: [{ title: "Sign in — Goal Sprinta" }] }),
   component: AuthPage,
 });
