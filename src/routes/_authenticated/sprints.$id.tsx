@@ -227,6 +227,26 @@ function SprintDetail() {
         </div>
         <h1 className="mt-4 font-display text-3xl font-bold">{sprint.title}</h1>
         {sprint.description && <p className="mt-2 text-muted-foreground">{sprint.description}</p>}
+        <div className="mt-4 flex flex-wrap items-center gap-4">
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-muted-foreground">Start</span>
+            <Input
+              type="date"
+              value={sprint.start_date}
+              onChange={(e) => updateSprintDate("start_date", e.target.value || todayInputValue())}
+              className="h-8 w-40 text-sm"
+            />
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-muted-foreground">Target</span>
+            <Input
+              type="date"
+              value={sprint.end_date ?? ""}
+              onChange={(e) => updateSprintDate("end_date", e.target.value || null)}
+              className="h-8 w-40 text-sm"
+            />
+          </div>
+        </div>
         {sprint.status === "on_hold" && (
           <div className="mt-4 rounded-xl border border-amber-500/40 bg-amber-500/10 p-4">
             <div className="flex items-center gap-2">
