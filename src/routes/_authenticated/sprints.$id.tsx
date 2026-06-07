@@ -38,6 +38,10 @@ function SprintDetail() {
   const [milestones, setMilestones] = useState<Milestone[]>([]);
   const [newTitle, setNewTitle] = useState("");
   const [loading, setLoading] = useState(true);
+  const [holdOpen, setHoldOpen] = useState(false);
+  const [holdReason, setHoldReason] = useState("");
+  const [holdResume, setHoldResume] = useState("");
+
 
   const load = async () => {
     setLoading(true);
