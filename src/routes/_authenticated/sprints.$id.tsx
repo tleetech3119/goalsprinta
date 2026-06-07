@@ -49,16 +49,43 @@ function SprintDetail() {
 
   const load = async () => {
     setLoading(true);
-    const [{ data: s }, { data: ms }] = await Promise.all([
+    const [{ data: s }, { data: ms }, { data: rs }] = await Promise.all([
       supabase.from("sprints").select("*").eq("id", id).maybeSingle(),
       supabase.from("milestones").select("*").eq("sprint_id", id).order("position", { ascending: true }).order("created_at", { ascending: true }),
+      supabase.from("rewards").select("*").eq("sprint_id", id).order("created_at", { ascending: true }),
     ]);
     setSprint(s as Sprint | null);
     setMilestones((ms ?? []) as Milestone[]);
+    setRewards((rs ?? []) as Reward[]);
     setLoading(false);
   };
 
   useEffect(() => { load(); }, [id]);
+
+  const addReward = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!rewardTitle.trim()) return;
+    const { data: userData } = await supabase.auth.getUser();
+    const { data, error } = await supabase.from("rewards").insert({
+      sprint_id: id, user_id: userData.user!.id, title: rewardTitle.trim(), description: rewardDesc.trim() || null,
+    }).select().single();
+    if (error) return toast.error(error.message);
+    setRewards((r) => [...r, data as Reward]);
+    setRewardTitle(""); setRewardDesc("");
+    await refresh();
+  };
+
+  const toggleReward = async (r: Reward) => {
+    const next = !r.claimed;
+    setRewards((arr) => arr.map((x) => x.id === r.id ? { ...x, claimed: next } : x));
+    await supabase.from("rewards").update({ claimed: next, claimed_at: next ? new Date().toISOString() : null }).eq("id", r.id);
+  };
+
+  const removeReward = async (rid: string) => {
+    setRewards((arr) => arr.filter((x) => x.id !== rid));
+    await supabase.from("rewards").delete().eq("id", rid);
+    await refresh();
+  };
 
   const addMilestone = async (e: React.FormEvent) => {
     e.preventDefault();
