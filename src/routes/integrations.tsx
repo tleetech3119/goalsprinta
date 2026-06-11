@@ -74,9 +74,9 @@ function IntegrationsPage() {
             Start sprinting with the tools you already love. Your first sprint is free.
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
-            <Link to="/auth">
+          <Link to="/pricing">
               <Button size="lg" className="bg-gradient-primary text-primary-foreground shadow-glow hover:opacity-90">
-                Start your first sprint — free
+                See pricing
               </Button>
             </Link>
             <Link to="/">
