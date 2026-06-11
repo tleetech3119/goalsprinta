@@ -242,9 +242,6 @@ function Landing() {
                 Start sprinting — free
               </Button>
             </Link>
-            <Link to="/steps">
-              <Button size="lg" variant="outline">Read more about the steps</Button>
-            </Link>
           </div>
         </article>
       </section>
