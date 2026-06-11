@@ -517,11 +517,11 @@ function Landing() {
           </p>
           <div className="mt-10 flex flex-wrap justify-center gap-3">
             <Link to="/auth">
-              <Button size="lg" className="bg-gradient-primary text-primary-foreground shadow-glow hover:opacity-90">
+              <Button size="lg" className="w-56 bg-gradient-primary text-primary-foreground shadow-glow hover:opacity-90">
                 Start Your Free Sprint
               </Button>
             </Link>
-            <a href="#how"><Button size="lg" variant="outline">How It Works</Button></a>
+            <a href="#how"><Button size="lg" className="w-56 bg-gradient-primary text-primary-foreground shadow-glow hover:opacity-90">How It Works</Button></a>
           </div>
           <p className="mt-4 text-xs text-muted-foreground">
             A new outcome is just one sprint away.
