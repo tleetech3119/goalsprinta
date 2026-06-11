@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
-import { CheckCircle, KanbanSquare, Sparkles, Target, Trophy, XCircle, Zap } from "lucide-react";
+import { Calendar, CheckCircle, KanbanSquare, Sparkles, Target, Trophy, XCircle, Zap, FileText, CheckSquare, Cloud, Mail, Clock, Puzzle } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -150,6 +150,50 @@ function Landing() {
             <Link to="/auth">
               <Button size="lg" variant="outline">Start sprinting — free</Button>
             </Link>
+          </div>
+        </article>
+      </section>
+
+      <section id="integrations" className="scroll-mt-16 border-t border-border bg-card/20">
+        <article className="container mx-auto max-w-3xl px-6 py-24">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Integrations</p>
+          <h2 className="mt-4 font-display text-4xl font-bold leading-tight md:text-5xl">
+            Works With <span className="bg-gradient-primary bg-clip-text text-transparent">Your Life</span>
+          </h2>
+          <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
+            Connects with the tools you already use to run your life. No need to change your workflow — just make it more powerful.
+          </p>
+
+          <div className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-4">
+            {[
+              { name: "Google Calendar", icon: Calendar },
+              { name: "Slack", icon: Zap },
+              { name: "Notion", icon: FileText },
+              { name: "Todoist", icon: CheckSquare },
+              { name: "Zapier", icon: Puzzle },
+              { name: "Google Drive", icon: Cloud },
+              { name: "Outlook Calendar", icon: Mail },
+              { name: "iCal", icon: Clock },
+            ].map((item) => (
+              <div
+                key={item.name}
+                className="flex flex-col items-center gap-3 rounded-2xl border border-border bg-card/60 p-6 text-center shadow-card"
+              >
+                <div className="grid h-12 w-12 place-items-center rounded-xl bg-gradient-hero text-primary-foreground">
+                  <item.icon className="h-6 w-6" />
+                </div>
+                <span className="text-sm font-medium">{item.name}</span>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-12 space-y-6 text-lg leading-relaxed text-muted-foreground">
+            <p>
+              Goal Sprinta fits seamlessly into your existing digital life. Automatically sync sprint deadlines to your calendar, get milestone reminders in Slack, or connect to thousands of other apps with Zapier.
+            </p>
+            <p>
+              Whether you plan in Notion, manage tasks in Todoist, or live by your Outlook Calendar, your sprints stay in sync. Everything stays connected so you can focus on moving forward, not managing another tool.
+            </p>
           </div>
         </article>
       </section>
