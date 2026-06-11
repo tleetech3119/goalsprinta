@@ -24,8 +24,8 @@ function Landing() {
   return (
     <div className="min-h-screen bg-background">
       <header className="container mx-auto flex items-center justify-between px-6 py-6">
-        <div className="flex items-center gap-2 font-display text-xl font-bold">
-          <span className="grid h-8 w-8 place-items-center rounded-lg bg-gradient-primary text-primary-foreground"><Zap className="h-4 w-4" /></span>
+        <div className="flex items-center gap-2.5 font-display text-2xl font-bold">
+          <span className="grid h-10 w-10 place-items-center rounded-lg bg-gradient-primary text-primary-foreground"><Zap className="h-5 w-5" /></span>
           Goal Sprinta
         </div>
         <Link to="/auth"><Button variant="ghost">Sign in</Button></Link>
