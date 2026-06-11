@@ -2,16 +2,16 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, CheckCircle, XCircle, Zap } from "lucide-react";
 
-export const Route = createFileRoute("/why")({
+export const Route = createFileRoute("/how")({
   head: () => ({
     meta: [
-      { title: "Why Goal Sprinta — The Problem and the Fix" },
+      { title: "How Goal Sprinta Works — The Problem and the Fix" },
       { name: "description", content: "Why goals fade — and the sprint-based system that finally closes the gap between ambition and follow-through." },
-      { property: "og:title", content: "Why Goal Sprinta — The Problem and the Fix" },
+      { property: "og:title", content: "How Goal Sprinta Works" },
       { property: "og:description", content: "Your ambition isn't the problem. Your system is. Here's the fix." },
     ],
   }),
-  component: WhyPage,
+  component: HowPage,
 });
 
 const comparison = [
@@ -22,7 +22,7 @@ const comparison = [
   { before: "A cycle of procrastination, guilt, and failure", after: "A system of focus, action, and accomplishment" },
 ];
 
-function WhyPage() {
+function HowPage() {
   return (
     <div className="min-h-screen bg-background">
       <header className="container mx-auto flex items-center justify-between px-6 py-6">
