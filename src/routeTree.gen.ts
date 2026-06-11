@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WhyRouteImport } from './routes/why'
 import { Route as StepsRouteImport } from './routes/steps'
+import { Route as StartRouteImport } from './routes/start'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as IntegrationsRouteImport } from './routes/integrations'
 import { Route as HowRouteImport } from './routes/how'
@@ -34,6 +35,11 @@ const WhyRoute = WhyRouteImport.update({
 const StepsRoute = StepsRouteImport.update({
   id: '/steps',
   path: '/steps',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StartRoute = StartRouteImport.update({
+  id: '/start',
+  path: '/start',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PricingRoute = PricingRouteImport.update({
@@ -116,6 +122,7 @@ export interface FileRoutesByFullPath {
   '/how': typeof HowRoute
   '/integrations': typeof IntegrationsRoute
   '/pricing': typeof PricingRoute
+  '/start': typeof StartRoute
   '/steps': typeof StepsRoute
   '/why': typeof WhyRoute
   '/affirmations': typeof AuthenticatedAffirmationsRoute
@@ -133,6 +140,7 @@ export interface FileRoutesByTo {
   '/how': typeof HowRoute
   '/integrations': typeof IntegrationsRoute
   '/pricing': typeof PricingRoute
+  '/start': typeof StartRoute
   '/steps': typeof StepsRoute
   '/why': typeof WhyRoute
   '/affirmations': typeof AuthenticatedAffirmationsRoute
@@ -152,6 +160,7 @@ export interface FileRoutesById {
   '/how': typeof HowRoute
   '/integrations': typeof IntegrationsRoute
   '/pricing': typeof PricingRoute
+  '/start': typeof StartRoute
   '/steps': typeof StepsRoute
   '/why': typeof WhyRoute
   '/_authenticated/affirmations': typeof AuthenticatedAffirmationsRoute
@@ -171,6 +180,7 @@ export interface FileRouteTypes {
     | '/how'
     | '/integrations'
     | '/pricing'
+    | '/start'
     | '/steps'
     | '/why'
     | '/affirmations'
@@ -188,6 +198,7 @@ export interface FileRouteTypes {
     | '/how'
     | '/integrations'
     | '/pricing'
+    | '/start'
     | '/steps'
     | '/why'
     | '/affirmations'
@@ -206,6 +217,7 @@ export interface FileRouteTypes {
     | '/how'
     | '/integrations'
     | '/pricing'
+    | '/start'
     | '/steps'
     | '/why'
     | '/_authenticated/affirmations'
@@ -225,6 +237,7 @@ export interface RootRouteChildren {
   HowRoute: typeof HowRoute
   IntegrationsRoute: typeof IntegrationsRoute
   PricingRoute: typeof PricingRoute
+  StartRoute: typeof StartRoute
   StepsRoute: typeof StepsRoute
   WhyRoute: typeof WhyRoute
 }
@@ -243,6 +256,13 @@ declare module '@tanstack/react-router' {
       path: '/steps'
       fullPath: '/steps'
       preLoaderRoute: typeof StepsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/start': {
+      id: '/start'
+      path: '/start'
+      fullPath: '/start'
+      preLoaderRoute: typeof StartRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pricing': {
@@ -376,9 +396,20 @@ const rootRouteChildren: RootRouteChildren = {
   HowRoute: HowRoute,
   IntegrationsRoute: IntegrationsRoute,
   PricingRoute: PricingRoute,
+  StartRoute: StartRoute,
   StepsRoute: StepsRoute,
   WhyRoute: WhyRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

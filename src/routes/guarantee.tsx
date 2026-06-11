@@ -63,7 +63,7 @@ function GuaranteePage() {
           <p className="mt-2 text-muted-foreground">
             Start your first sprint today—completely risk-free.
           </p>
-          <Link to="/auth" className="mt-6 inline-block">
+          <Link to="/start" className="mt-6 inline-block">
             <Button size="lg" className="bg-gradient-primary text-primary-foreground shadow-glow hover:opacity-90">
               Start your first sprint — free
             </Button>
