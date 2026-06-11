@@ -152,7 +152,7 @@ function PricingPage() {
                 </ul>
 
                 <div className="mt-auto pt-8">
-                  <Link to={plan.ctaLink}>
+                  <Link to="/faq">
                     <Button
                       size="lg"
                       className={`w-full ${isPopular ? "bg-gradient-primary text-primary-foreground shadow-glow hover:opacity-90" : ""}`}
