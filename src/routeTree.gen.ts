@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WhyRouteImport } from './routes/why'
+import { Route as HowRouteImport } from './routes/how'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
@@ -23,6 +24,11 @@ import { Route as AuthenticatedSprintsIdRouteImport } from './routes/_authentica
 const WhyRoute = WhyRouteImport.update({
   id: '/why',
   path: '/why',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HowRoute = HowRouteImport.update({
+  id: '/how',
+  path: '/how',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -75,6 +81,7 @@ const AuthenticatedSprintsIdRoute = AuthenticatedSprintsIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/how': typeof HowRoute
   '/why': typeof WhyRoute
   '/affirmations': typeof AuthenticatedAffirmationsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
@@ -86,6 +93,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/how': typeof HowRoute
   '/why': typeof WhyRoute
   '/affirmations': typeof AuthenticatedAffirmationsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
@@ -99,6 +107,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/how': typeof HowRoute
   '/why': typeof WhyRoute
   '/_authenticated/affirmations': typeof AuthenticatedAffirmationsRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
@@ -112,6 +121,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/how'
     | '/why'
     | '/affirmations'
     | '/dashboard'
@@ -123,6 +133,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/how'
     | '/why'
     | '/affirmations'
     | '/dashboard'
@@ -135,6 +146,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/how'
     | '/why'
     | '/_authenticated/affirmations'
     | '/_authenticated/dashboard'
@@ -148,6 +160,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  HowRoute: typeof HowRoute
   WhyRoute: typeof WhyRoute
 }
 
@@ -158,6 +171,13 @@ declare module '@tanstack/react-router' {
       path: '/why'
       fullPath: '/why'
       preLoaderRoute: typeof WhyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/how': {
+      id: '/how'
+      path: '/how'
+      fullPath: '/how'
+      preLoaderRoute: typeof HowRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -251,8 +271,19 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  HowRoute: HowRoute,
   WhyRoute: WhyRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
