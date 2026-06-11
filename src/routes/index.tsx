@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
-import { CheckCircle, Sparkles, Target, Trophy, XCircle, Zap } from "lucide-react";
+import { CheckCircle, KanbanSquare, Sparkles, Target, Trophy, XCircle, Zap } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -61,7 +61,7 @@ function Landing() {
         </div>
       </section>
 
-      <section id="how" className="scroll-mt-16 border-t border-border bg-card/20">
+      <section id="problem-solution" className="scroll-mt-16 border-t border-border bg-card/20">
         <article className="container mx-auto max-w-3xl px-6 py-24">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Problem &amp; Solution</p>
           <h2 className="mt-4 font-display text-4xl font-bold leading-tight md:text-5xl">The &quot;Someday&quot; Trap</h2>
@@ -149,6 +149,64 @@ function Landing() {
             </Link>
             <Link to="/auth">
               <Button size="lg" variant="outline">Start sprinting — free</Button>
+            </Link>
+          </div>
+        </article>
+      </section>
+
+      <section id="how" className="scroll-mt-16 border-t border-border bg-card/20">
+        <article className="container mx-auto max-w-3xl px-6 py-24">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">How It Works</p>
+          <h2 className="mt-4 font-display text-4xl font-bold leading-tight md:text-5xl">
+            Achieve Any Goal in <span className="bg-gradient-primary bg-clip-text text-transparent">3 Simple Steps</span>
+          </h2>
+          <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
+            Stop staring at the mountain. Start taking the first step. Goal Sprinta turns overwhelming ambitions into a simple, repeatable process.
+          </p>
+
+          <div className="mt-14 space-y-10">
+            <div className="relative rounded-2xl border border-border bg-card/60 p-6 shadow-card md:p-8">
+              <div className="flex items-center gap-3">
+                <span className="font-display text-sm font-bold text-primary">01</span>
+                <Target className="h-5 w-5 text-primary" />
+                <h3 className="font-display text-xl font-semibold md:text-2xl">Define Your Mission</h3>
+              </div>
+              <p className="mt-4 text-base leading-relaxed text-muted-foreground">
+                First, set your big-picture goal. This is your North Star — the &#39;what&#39; and &#39;why&#39; behind your ambition. Whether it&#39;s running a marathon or launching a new product, Goal Sprinta helps you clarify the final destination so you never lose sight of what you&#39;re working toward.
+              </p>
+            </div>
+
+            <div className="relative rounded-2xl border border-border bg-card/60 p-6 shadow-card md:p-8">
+              <div className="flex items-center gap-3">
+                <span className="font-display text-sm font-bold text-primary">02</span>
+                <KanbanSquare className="h-5 w-5 text-primary" />
+                <h3 className="font-display text-xl font-semibold md:text-2xl">Launch Your First Sprint</h3>
+              </div>
+              <p className="mt-4 text-base leading-relaxed text-muted-foreground">
+                Break off a small piece of your big goal and plan your first two-week sprint. What can you realistically accomplish in the next 14 days? Add specific, measurable milestones that will move you forward. This isn&#39;t about doing everything at once; it&#39;s about making meaningful, focused progress.
+              </p>
+            </div>
+
+            <div className="relative rounded-2xl border border-border bg-card/60 p-6 shadow-card md:p-8">
+              <div className="flex items-center gap-3">
+                <span className="font-display text-sm font-bold text-primary">03</span>
+                <Trophy className="h-5 w-5 text-primary" />
+                <h3 className="font-display text-xl font-semibold md:text-2xl">Track, Reward, Repeat</h3>
+              </div>
+              <p className="mt-4 text-base leading-relaxed text-muted-foreground">
+                Check in daily, move your milestones from &#39;To Do&#39; to &#39;Done,&#39; and watch your progress bar fill up. When your sprint is complete, claim the personal reward you set for yourself — a guilt-free night off, a new gadget, whatever fuels you. Then, plan your next sprint. Each cycle builds on the last, creating unstoppable momentum.
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-12 flex flex-wrap gap-3">
+            <Link to="/auth">
+              <Button size="lg" className="bg-gradient-primary text-primary-foreground shadow-glow hover:opacity-90">
+                Start sprinting — free
+              </Button>
+            </Link>
+            <Link to="/steps">
+              <Button size="lg" variant="outline">Read more about the steps</Button>
             </Link>
           </div>
         </article>
