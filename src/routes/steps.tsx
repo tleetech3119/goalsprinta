@@ -85,11 +85,6 @@ function StepsPage() {
             Join thousands turning big dreams into daily wins. Your first sprint is free.
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
-            <Link to="/integrations">
-              <Button size="lg" className="bg-gradient-primary text-primary-foreground shadow-glow hover:opacity-90">
-                See integrations
-              </Button>
-            </Link>
             <Link to="/">
               <Button size="lg" variant="outline">Back to home</Button>
             </Link>
