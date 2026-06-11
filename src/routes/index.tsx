@@ -535,20 +535,8 @@ function Landing() {
 
       {/* FOOTER */}
       <footer className="border-t border-border bg-card/30">
-        <div className="container mx-auto grid gap-12 px-6 py-16 md:grid-cols-2">
-          <div>
-
-            <p className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
-              <Shield className="h-3.5 w-3.5 text-primary" />
-              <span>SOC 2 Type II Certified</span><span>·</span>
-              <span>GDPR Compliant</span><span>·</span>
-              <span>CCPA Ready</span><span>·</span>
-              <span>AES-256 Encryption</span><span>·</span>
-              <span>Hosted on AWS</span>
-            </p>
-          </div>
-
-          <div className="rounded-2xl border border-border bg-card/60 p-6 shadow-card">
+        <div className="container mx-auto flex flex-col items-center gap-10 px-6 py-16">
+          <div className="w-full max-w-xl rounded-2xl border border-border bg-card/60 p-6 shadow-card">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">The Weekly Sprint</p>
             <h3 className="mt-2 font-display text-xl font-semibold">Actionable goal-setting in your inbox</h3>
             <p className="mt-2 text-sm text-muted-foreground">
@@ -569,8 +557,18 @@ function Landing() {
               We respect your privacy. Unsubscribe at any time.
             </p>
           </div>
+
+          <p className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-center text-xs text-muted-foreground">
+            <Shield className="h-3.5 w-3.5 text-primary" />
+            <span>SOC 2 Type II Certified</span><span>·</span>
+            <span>GDPR Compliant</span><span>·</span>
+            <span>CCPA Ready</span><span>·</span>
+            <span>AES-256 Encryption</span><span>·</span>
+            <span>Hosted on AWS</span>
+          </p>
         </div>
       </footer>
+
     </div>
   );
 }
