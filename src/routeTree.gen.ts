@@ -14,7 +14,6 @@ import { Route as StepsRouteImport } from './routes/steps'
 import { Route as StartRouteImport } from './routes/start'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as IntegrationsRouteImport } from './routes/integrations'
-import { Route as HowRouteImport } from './routes/how'
 import { Route as GuaranteeRouteImport } from './routes/guarantee'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as AuthRouteImport } from './routes/auth'
@@ -50,11 +49,6 @@ const PricingRoute = PricingRouteImport.update({
 const IntegrationsRoute = IntegrationsRouteImport.update({
   id: '/integrations',
   path: '/integrations',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const HowRoute = HowRouteImport.update({
-  id: '/how',
-  path: '/how',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GuaranteeRoute = GuaranteeRouteImport.update({
@@ -119,7 +113,6 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/faq': typeof FaqRoute
   '/guarantee': typeof GuaranteeRoute
-  '/how': typeof HowRoute
   '/integrations': typeof IntegrationsRoute
   '/pricing': typeof PricingRoute
   '/start': typeof StartRoute
@@ -137,7 +130,6 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/faq': typeof FaqRoute
   '/guarantee': typeof GuaranteeRoute
-  '/how': typeof HowRoute
   '/integrations': typeof IntegrationsRoute
   '/pricing': typeof PricingRoute
   '/start': typeof StartRoute
@@ -157,7 +149,6 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/faq': typeof FaqRoute
   '/guarantee': typeof GuaranteeRoute
-  '/how': typeof HowRoute
   '/integrations': typeof IntegrationsRoute
   '/pricing': typeof PricingRoute
   '/start': typeof StartRoute
@@ -177,7 +168,6 @@ export interface FileRouteTypes {
     | '/auth'
     | '/faq'
     | '/guarantee'
-    | '/how'
     | '/integrations'
     | '/pricing'
     | '/start'
@@ -195,7 +185,6 @@ export interface FileRouteTypes {
     | '/auth'
     | '/faq'
     | '/guarantee'
-    | '/how'
     | '/integrations'
     | '/pricing'
     | '/start'
@@ -214,7 +203,6 @@ export interface FileRouteTypes {
     | '/auth'
     | '/faq'
     | '/guarantee'
-    | '/how'
     | '/integrations'
     | '/pricing'
     | '/start'
@@ -234,7 +222,6 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   FaqRoute: typeof FaqRoute
   GuaranteeRoute: typeof GuaranteeRoute
-  HowRoute: typeof HowRoute
   IntegrationsRoute: typeof IntegrationsRoute
   PricingRoute: typeof PricingRoute
   StartRoute: typeof StartRoute
@@ -277,13 +264,6 @@ declare module '@tanstack/react-router' {
       path: '/integrations'
       fullPath: '/integrations'
       preLoaderRoute: typeof IntegrationsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/how': {
-      id: '/how'
-      path: '/how'
-      fullPath: '/how'
-      preLoaderRoute: typeof HowRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/guarantee': {
@@ -393,7 +373,6 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   FaqRoute: FaqRoute,
   GuaranteeRoute: GuaranteeRoute,
-  HowRoute: HowRoute,
   IntegrationsRoute: IntegrationsRoute,
   PricingRoute: PricingRoute,
   StartRoute: StartRoute,

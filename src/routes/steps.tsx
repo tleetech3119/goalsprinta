@@ -46,7 +46,7 @@ function StepsPage() {
           <span className="grid h-8 w-8 place-items-center rounded-lg bg-gradient-primary text-primary-foreground"><Zap className="h-4 w-4" /></span>
           Goal Sprinta
         </Link>
-        <Link to="/how"><Button variant="ghost"><ArrowLeft className="mr-2 h-4 w-4" /> Back to How</Button></Link>
+        <Link to="/why"><Button variant="ghost"><ArrowLeft className="mr-2 h-4 w-4" /> Back to Why</Button></Link>
       </header>
 
       <article className="container mx-auto max-w-3xl px-6 pb-24 pt-8">
