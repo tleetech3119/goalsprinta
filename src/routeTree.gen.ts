@@ -14,6 +14,7 @@ import { Route as StepsRouteImport } from './routes/steps'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as IntegrationsRouteImport } from './routes/integrations'
 import { Route as HowRouteImport } from './routes/how'
+import { Route as GuaranteeRouteImport } from './routes/guarantee'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
@@ -48,6 +49,11 @@ const IntegrationsRoute = IntegrationsRouteImport.update({
 const HowRoute = HowRouteImport.update({
   id: '/how',
   path: '/how',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GuaranteeRoute = GuaranteeRouteImport.update({
+  id: '/guarantee',
+  path: '/guarantee',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FaqRoute = FaqRouteImport.update({
@@ -106,6 +112,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/faq': typeof FaqRoute
+  '/guarantee': typeof GuaranteeRoute
   '/how': typeof HowRoute
   '/integrations': typeof IntegrationsRoute
   '/pricing': typeof PricingRoute
@@ -122,6 +129,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/faq': typeof FaqRoute
+  '/guarantee': typeof GuaranteeRoute
   '/how': typeof HowRoute
   '/integrations': typeof IntegrationsRoute
   '/pricing': typeof PricingRoute
@@ -140,6 +148,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/faq': typeof FaqRoute
+  '/guarantee': typeof GuaranteeRoute
   '/how': typeof HowRoute
   '/integrations': typeof IntegrationsRoute
   '/pricing': typeof PricingRoute
@@ -158,6 +167,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/faq'
+    | '/guarantee'
     | '/how'
     | '/integrations'
     | '/pricing'
@@ -174,6 +184,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/faq'
+    | '/guarantee'
     | '/how'
     | '/integrations'
     | '/pricing'
@@ -191,6 +202,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/auth'
     | '/faq'
+    | '/guarantee'
     | '/how'
     | '/integrations'
     | '/pricing'
@@ -209,6 +221,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   FaqRoute: typeof FaqRoute
+  GuaranteeRoute: typeof GuaranteeRoute
   HowRoute: typeof HowRoute
   IntegrationsRoute: typeof IntegrationsRoute
   PricingRoute: typeof PricingRoute
@@ -251,6 +264,13 @@ declare module '@tanstack/react-router' {
       path: '/how'
       fullPath: '/how'
       preLoaderRoute: typeof HowRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/guarantee': {
+      id: '/guarantee'
+      path: '/guarantee'
+      fullPath: '/guarantee'
+      preLoaderRoute: typeof GuaranteeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/faq': {
@@ -352,6 +372,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   FaqRoute: FaqRoute,
+  GuaranteeRoute: GuaranteeRoute,
   HowRoute: HowRoute,
   IntegrationsRoute: IntegrationsRoute,
   PricingRoute: PricingRoute,
@@ -361,13 +382,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
