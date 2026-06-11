@@ -159,7 +159,7 @@ function Landing() {
 
       <section id="integrations" className="scroll-mt-16 border-t border-border bg-card/20">
         <article className="container mx-auto max-w-3xl px-6 py-24">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Integrations</p>
+          
           <h2 className="mt-4 font-display text-4xl font-bold leading-tight md:text-5xl">
             Works With <span className="bg-gradient-primary bg-clip-text text-transparent">Your Life</span>
           </h2>
