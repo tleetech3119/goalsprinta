@@ -109,7 +109,7 @@ function Landing() {
 
       {/* HERO */}
       <Section className="pt-10 text-center sm:pt-16">
-        <h1 className="mx-auto mt-8 max-w-4xl text-5xl font-bold leading-[1.05] md:text-6xl lg:text-7xl">
+        <h1 className="mx-auto mt-8 max-w-4xl text-5xl font-bold leading-[1.05] tracking-tight md:text-6xl lg:text-7xl">
           Stop trying.{" "}
           <span className="bg-gradient-primary bg-clip-text text-transparent">Start finishing.</span>
         </h1>
@@ -137,7 +137,7 @@ function Landing() {
 
         {/* 3 Steps */}
         <div className="mx-auto mt-16 max-w-5xl text-left">
-          <h2 className="text-center text-3xl font-bold sm:text-4xl">Achieve Any Goal in 3 Simple Steps</h2>
+          <h2 className="text-center text-3xl font-bold tracking-tight sm:text-4xl">Achieve Any Goal in 3 Simple Steps</h2>
           <p className="mx-auto mt-4 max-w-2xl text-center text-muted-foreground">
             Stop staring at the mountain. Start taking the first step. Goal Sprinta turns overwhelming ambitions into a simple, repeatable process.
           </p>
@@ -171,7 +171,7 @@ function Landing() {
 
       {/* PROBLEM */}
       <Section className="max-w-3xl">
-        <h2 className="text-3xl font-bold sm:text-4xl">The 'Someday' Trap</h2>
+        <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">The 'Someday' Trap</h2>
         <div className="mt-6 space-y-5 text-base leading-relaxed text-muted-foreground">
           <p>Another new notebook. Another burst of January 1st motivation. You write down the big ones: “Launch the side business,” “Lose 20 pounds,” “Finally write that book.” The ambition feels electric. You map out a few steps, tell a friend, and feel like this time—this time—will be different.</p>
           <p>A few weeks pass. Life happens. A deadline at work, a sick kid, a week of bad sleep. The perfect plan gets disrupted. The daily check-ins stop. The notebook gathers dust on your nightstand. That electric ambition is replaced by a low hum of guilt.</p>
@@ -182,7 +182,7 @@ function Landing() {
 
       {/* SOLUTION */}
       <Section className="max-w-5xl">
-        <h2 className="text-3xl font-bold sm:text-4xl">From Overwhelmed to ‘Done’ in Two-Week Sprints</h2>
+        <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">From Overwhelmed to ‘Done’ in Two-Week Sprints</h2>
         <p className="mt-4 max-w-3xl text-muted-foreground">
           We've adapted the hyper-effective “sprint” methodology used by the world's best tech companies and applied it
           to the most important project of all: your life.
@@ -215,7 +215,7 @@ function Landing() {
 
       {/* FEATURES */}
       <Section id="features">
-        <h2 className="max-w-2xl text-3xl font-bold sm:text-4xl">Every feature, purpose-built for finishing.</h2>
+        <h2 className="max-w-2xl text-3xl font-bold tracking-tight sm:text-4xl">Every feature, purpose-built for finishing.</h2>
         <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {[
             { icon: Rocket, t: "Sprint-Based Goal Setting", h: "Break Down Big Ambitions", d: "Deconstruct your biggest ambitions into focused, two-week sprints — concrete actions you can start today." },
@@ -239,7 +239,7 @@ function Landing() {
 
       {/* INTEGRATIONS */}
       <Section className="max-w-5xl text-center">
-        <h2 className="text-2xl font-bold sm:text-3xl">Connects with the tools you already use.</h2>
+        <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">Connects with the tools you already use.</h2>
         <p className="mx-auto mt-3 max-w-2xl text-muted-foreground">
           Sync sprint deadlines to your calendar, get milestone reminders in Slack, or connect to thousands of apps
           via Zapier.
@@ -254,7 +254,7 @@ function Landing() {
 
       {/* COMPARISON */}
       <Section className="max-w-5xl">
-        <h2 className="text-3xl font-bold sm:text-4xl">There's a better way than ‘winging it.’</h2>
+        <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">There's a better way than ‘winging it.’</h2>
         <p className="mt-4 max-w-2xl text-muted-foreground">
           See how Goal Sprinta's dedicated system stacks up against makeshift solutions and generic task managers.
         </p>
@@ -296,7 +296,7 @@ function Landing() {
       {/* PRICING */}
       <Section id="pricing">
         <div className="text-center">
-          <h2 className="text-3xl font-bold sm:text-4xl">A plan for every ambition.</h2>
+          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">A plan for every ambition.</h2>
           <p className="mt-3 text-muted-foreground">Billed monthly · Save 20% annually</p>
         </div>
         <div className="mt-12 grid gap-6 md:grid-cols-3">
@@ -362,7 +362,7 @@ function Landing() {
       <Section className="max-w-3xl">
         <Card className="border-border bg-gradient-hero p-10 text-center shadow-card">
           <ShieldCheck className="mx-auto h-12 w-12 text-primary" />
-          <h2 className="mt-4 text-2xl font-bold sm:text-3xl">Our ‘Finish Your First Goal’ Guarantee</h2>
+          <h2 className="mt-4 text-2xl font-bold tracking-tight sm:text-3xl">Our ‘Finish Your First Goal’ Guarantee</h2>
           <p className="mt-4 text-base leading-relaxed">
             Sign up for Goal Sprinta Pro. Pick one meaningful goal. Complete three two-week sprints. If after six weeks
             you don't feel more focused, more in control, and more accomplished — I'll refund every penny. Just email
@@ -374,7 +374,7 @@ function Landing() {
 
       {/* FAQ */}
       <Section id="faq" className="max-w-3xl">
-        <h2 className="text-3xl font-bold sm:text-4xl">Frequently asked questions</h2>
+        <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Frequently asked questions</h2>
         <Accordion type="single" collapsible className="mt-8">
           {[
             ["What's the difference between a goal and a sprint?", "A goal is your big, long-term objective—the ‘what.’ A sprint is the short, two-week block of focused work you do to get there—the ‘how.’ You might have a goal to ‘Write a novel,’ and your first sprint might be ‘Outline the first three chapters.’"],
@@ -398,7 +398,7 @@ function Landing() {
 
       {/* FINAL CTA */}
       <Section className="text-center">
-        <h2 className="mx-auto max-w-3xl text-4xl font-bold sm:text-5xl">
+        <h2 className="mx-auto max-w-3xl text-4xl font-bold tracking-tight sm:text-5xl">
           How many more ‘somedays’ can you afford?
         </h2>
         <p className="mx-auto mt-5 max-w-xl text-muted-foreground">
