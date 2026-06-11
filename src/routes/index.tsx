@@ -109,9 +109,6 @@ function Landing() {
 
       {/* HERO */}
       <Section className="pt-10 text-center sm:pt-16">
-        <div className="mx-auto inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-4 py-1.5 text-xs text-muted-foreground">
-          <Sparkles className="h-3.5 w-3.5 text-primary" /> Trusted by 50,000+ achievers
-        </div>
         <h1 className="mx-auto mt-8 max-w-4xl text-5xl font-bold leading-[1.05] md:text-6xl lg:text-7xl">
           Stop trying.{" "}
           <span className="bg-gradient-primary bg-clip-text text-transparent">Start finishing.</span>
