@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WhyRouteImport } from './routes/why'
 import { Route as StepsRouteImport } from './routes/steps'
+import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as IntegrationsRouteImport } from './routes/integrations'
 import { Route as HowRouteImport } from './routes/how'
 import { Route as AuthRouteImport } from './routes/auth'
@@ -31,6 +32,11 @@ const WhyRoute = WhyRouteImport.update({
 const StepsRoute = StepsRouteImport.update({
   id: '/steps',
   path: '/steps',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PricingRoute = PricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IntegrationsRoute = IntegrationsRouteImport.update({
@@ -95,6 +101,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/how': typeof HowRoute
   '/integrations': typeof IntegrationsRoute
+  '/pricing': typeof PricingRoute
   '/steps': typeof StepsRoute
   '/why': typeof WhyRoute
   '/affirmations': typeof AuthenticatedAffirmationsRoute
@@ -109,6 +116,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/how': typeof HowRoute
   '/integrations': typeof IntegrationsRoute
+  '/pricing': typeof PricingRoute
   '/steps': typeof StepsRoute
   '/why': typeof WhyRoute
   '/affirmations': typeof AuthenticatedAffirmationsRoute
@@ -125,6 +133,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/how': typeof HowRoute
   '/integrations': typeof IntegrationsRoute
+  '/pricing': typeof PricingRoute
   '/steps': typeof StepsRoute
   '/why': typeof WhyRoute
   '/_authenticated/affirmations': typeof AuthenticatedAffirmationsRoute
@@ -141,6 +150,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/how'
     | '/integrations'
+    | '/pricing'
     | '/steps'
     | '/why'
     | '/affirmations'
@@ -155,6 +165,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/how'
     | '/integrations'
+    | '/pricing'
     | '/steps'
     | '/why'
     | '/affirmations'
@@ -170,6 +181,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/how'
     | '/integrations'
+    | '/pricing'
     | '/steps'
     | '/why'
     | '/_authenticated/affirmations'
@@ -186,6 +198,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   HowRoute: typeof HowRoute
   IntegrationsRoute: typeof IntegrationsRoute
+  PricingRoute: typeof PricingRoute
   StepsRoute: typeof StepsRoute
   WhyRoute: typeof WhyRoute
 }
@@ -204,6 +217,13 @@ declare module '@tanstack/react-router' {
       path: '/steps'
       fullPath: '/steps'
       preLoaderRoute: typeof StepsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pricing': {
+      id: '/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PricingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/integrations': {
@@ -313,6 +333,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   HowRoute: HowRoute,
   IntegrationsRoute: IntegrationsRoute,
+  PricingRoute: PricingRoute,
   StepsRoute: StepsRoute,
   WhyRoute: WhyRoute,
 }
