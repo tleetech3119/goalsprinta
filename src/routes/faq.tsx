@@ -119,11 +119,11 @@ function FaqPage() {
           <MessageCircleQuestion className="mx-auto h-10 w-10 text-primary" />
           <h2 className="mt-4 font-display text-2xl font-bold">Still have questions?</h2>
           <p className="mt-2 text-muted-foreground">
-            Start your free account and explore Goal Sprinta for yourself.
+            See our guarantee and start your first sprint risk-free.
           </p>
-          <Link to="/auth" className="mt-6 inline-block">
+          <Link to="/guarantee" className="mt-6 inline-block">
             <Button size="lg" className="bg-gradient-primary text-primary-foreground shadow-glow hover:opacity-90">
-              Start your first sprint — free
+              See our guarantee
             </Button>
           </Link>
           <div className="mt-4">
