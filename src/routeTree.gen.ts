@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WhyRouteImport } from './routes/why'
 import { Route as StepsRouteImport } from './routes/steps'
+import { Route as IntegrationsRouteImport } from './routes/integrations'
 import { Route as HowRouteImport } from './routes/how'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
@@ -30,6 +31,11 @@ const WhyRoute = WhyRouteImport.update({
 const StepsRoute = StepsRouteImport.update({
   id: '/steps',
   path: '/steps',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IntegrationsRoute = IntegrationsRouteImport.update({
+  id: '/integrations',
+  path: '/integrations',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HowRoute = HowRouteImport.update({
@@ -88,6 +94,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/how': typeof HowRoute
+  '/integrations': typeof IntegrationsRoute
   '/steps': typeof StepsRoute
   '/why': typeof WhyRoute
   '/affirmations': typeof AuthenticatedAffirmationsRoute
@@ -101,6 +108,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/how': typeof HowRoute
+  '/integrations': typeof IntegrationsRoute
   '/steps': typeof StepsRoute
   '/why': typeof WhyRoute
   '/affirmations': typeof AuthenticatedAffirmationsRoute
@@ -116,6 +124,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/how': typeof HowRoute
+  '/integrations': typeof IntegrationsRoute
   '/steps': typeof StepsRoute
   '/why': typeof WhyRoute
   '/_authenticated/affirmations': typeof AuthenticatedAffirmationsRoute
@@ -131,6 +140,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/how'
+    | '/integrations'
     | '/steps'
     | '/why'
     | '/affirmations'
@@ -144,6 +154,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/how'
+    | '/integrations'
     | '/steps'
     | '/why'
     | '/affirmations'
@@ -158,6 +169,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/auth'
     | '/how'
+    | '/integrations'
     | '/steps'
     | '/why'
     | '/_authenticated/affirmations'
@@ -173,6 +185,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   HowRoute: typeof HowRoute
+  IntegrationsRoute: typeof IntegrationsRoute
   StepsRoute: typeof StepsRoute
   WhyRoute: typeof WhyRoute
 }
@@ -191,6 +204,13 @@ declare module '@tanstack/react-router' {
       path: '/steps'
       fullPath: '/steps'
       preLoaderRoute: typeof StepsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/integrations': {
+      id: '/integrations'
+      path: '/integrations'
+      fullPath: '/integrations'
+      preLoaderRoute: typeof IntegrationsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/how': {
@@ -292,6 +312,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   HowRoute: HowRoute,
+  IntegrationsRoute: IntegrationsRoute,
   StepsRoute: StepsRoute,
   WhyRoute: WhyRoute,
 }
