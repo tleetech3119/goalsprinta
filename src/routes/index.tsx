@@ -94,7 +94,7 @@ function Landing() {
           Goal Sprinta
         </div>
         <nav className="hidden items-center gap-8 text-sm text-muted-foreground md:flex">
-          <a href="#how" className="hover:text-foreground">How it works</a>
+          <a href="#features" className="hover:text-foreground">How it works</a>
           <a href="#features" className="hover:text-foreground">Features</a>
           <a href="#pricing" className="hover:text-foreground">Pricing</a>
           <a href="#faq" className="hover:text-foreground">FAQ</a>
@@ -138,31 +138,36 @@ function Landing() {
           <span className="inline-flex items-center gap-1.5"><Lock className="h-3.5 w-3.5 text-primary" /> AES-256 bank-level encryption</span>
         </div>
 
-        {/* Hero visual */}
-        <div className="mx-auto mt-16 max-w-4xl rounded-3xl border border-border bg-gradient-hero p-2 shadow-card">
-          <div className="rounded-2xl bg-card p-6 sm:p-10">
-            <div className="grid gap-4 sm:grid-cols-3">
-              {[
-                { label: "To Do", items: ["Outline chapter 1"] },
-                { label: "In Progress", items: ["Draft intro section"] },
-                { label: "Done", items: ["Set up writing space", "Pick reward 🎁"] },
-              ].map((col) => (
-                <div key={col.label} className="rounded-xl border border-border bg-background/40 p-4 text-left">
-                  <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{col.label}</p>
-                  <div className="mt-3 space-y-2">
-                    {col.items.map((i) => (
-                      <div key={i} className="rounded-lg border border-border bg-card px-3 py-2 text-sm">{i}</div>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="mt-6 flex items-center gap-3">
-              <div className="h-2 flex-1 overflow-hidden rounded-full bg-muted">
-                <div className="h-full w-2/3 bg-gradient-primary" />
-              </div>
-              <span className="text-sm font-semibold text-primary">67%</span>
-            </div>
+        {/* 3 Steps */}
+        <div className="mx-auto mt-16 max-w-5xl text-left">
+          <h2 className="text-center text-3xl font-bold sm:text-4xl">Achieve Any Goal in 3 Simple Steps</h2>
+          <p className="mx-auto mt-4 max-w-2xl text-center text-muted-foreground">
+            Stop staring at the mountain. Start taking the first step. Goal Sprinta turns overwhelming ambitions into a simple, repeatable process.
+          </p>
+          <div className="mt-12 grid gap-6 md:grid-cols-3">
+            {[
+              {
+                n: "01",
+                t: "Define Your Mission",
+                d: "Set your big-picture goal. This is your North Star—the “what” and “why” behind your ambition.",
+              },
+              {
+                n: "02",
+                t: "Launch Your First Sprint",
+                d: "Break off a small piece and plan your first two-week sprint with specific, measurable milestones.",
+              },
+              {
+                n: "03",
+                t: "Track, Reward, Repeat",
+                d: "Check in daily, finish strong, claim your reward, and plan the next sprint. Momentum compounds.",
+              },
+            ].map((s) => (
+              <Card key={s.n} className="border-border bg-card p-6 shadow-card">
+                <span className="font-display text-3xl font-bold text-primary">{s.n}</span>
+                <h3 className="mt-4 text-xl font-semibold">{s.t}</h3>
+                <p className="mt-2 text-sm text-muted-foreground">{s.d}</p>
+              </Card>
+            ))}
           </div>
         </div>
       </Section>
@@ -208,42 +213,6 @@ function Landing() {
               ))}
             </tbody>
           </table>
-        </div>
-      </Section>
-
-      {/* HOW IT WORKS */}
-      <Section id="how">
-        <div className="max-w-2xl">
-          <h2 className="text-3xl font-bold sm:text-4xl">Achieve Any Goal in 3 Simple Steps</h2>
-          <p className="mt-4 text-muted-foreground">
-            Stop staring at the mountain. Start taking the first step. Goal Sprinta turns overwhelming
-            ambitions into a simple, repeatable process.
-          </p>
-        </div>
-        <div className="mt-12 grid gap-6 md:grid-cols-3">
-          {[
-            {
-              n: "01",
-              t: "Define Your Mission",
-              d: "Set your big-picture goal. This is your North Star—the “what” and “why” behind your ambition.",
-            },
-            {
-              n: "02",
-              t: "Launch Your First Sprint",
-              d: "Break off a small piece and plan your first two-week sprint with specific, measurable milestones.",
-            },
-            {
-              n: "03",
-              t: "Track, Reward, Repeat",
-              d: "Check in daily, finish strong, claim your reward, and plan the next sprint. Momentum compounds.",
-            },
-          ].map((s) => (
-            <Card key={s.n} className="border-border bg-card p-6 shadow-card">
-              <span className="font-display text-3xl font-bold text-primary">{s.n}</span>
-              <h3 className="mt-4 text-xl font-semibold">{s.t}</h3>
-              <p className="mt-2 text-sm text-muted-foreground">{s.d}</p>
-            </Card>
-          ))}
         </div>
       </Section>
 
