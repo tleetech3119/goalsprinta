@@ -148,10 +148,6 @@ const faqs = [
     q: "How is Goal Sprinta different from a simple to-do list app?",
     a: "To-do lists are great for simple tasks but fail at long-term goals. Goal Sprinta connects your daily actions (milestones) to your weekly objectives (sprints) and your ultimate life goals (missions).",
   },
-  {
-    q: "What's your refund policy?",
-    a: "We offer a no-questions-asked, 14-day money-back guarantee on all paid plans. Just send us a message and we'll issue a full refund immediately.",
-  },
 ];
 
 function Landing() {
