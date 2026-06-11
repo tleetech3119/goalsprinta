@@ -35,6 +35,7 @@ function Landing() {
         </p>
         <div className="mt-10 flex flex-wrap justify-center gap-3">
           <Link to="/auth"><Button size="lg" className="bg-gradient-primary text-primary-foreground shadow-glow hover:opacity-90">Start sprinting — free</Button></Link>
+          <Link to="/why"><Button size="lg" variant="outline">Why this works</Button></Link>
         </div>
 
         <div className="mt-24 grid gap-6 md:grid-cols-3">
