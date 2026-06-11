@@ -45,6 +45,9 @@ function Landing() {
           <Link to="/auth"><Button size="lg" className="bg-gradient-primary text-primary-foreground shadow-glow hover:opacity-90">Start sprinting — free</Button></Link>
           <a href="#how"><Button size="lg" className="bg-gradient-primary text-primary-foreground shadow-glow hover:opacity-90">How this works</Button></a>
         </div>
+        <div className="mt-3 flex justify-center">
+          <Link to="/pricing"><Button size="lg" className="bg-gradient-primary text-primary-foreground shadow-glow hover:opacity-90">Pricing</Button></Link>
+        </div>
 
         <div className="mt-24 grid gap-6 md:grid-cols-3">
           {[
