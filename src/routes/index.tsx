@@ -94,7 +94,7 @@ function Landing() {
           Goal Sprinta
         </div>
         <nav className="hidden items-center gap-8 text-sm text-muted-foreground md:flex">
-          <a href="#how" className="hover:text-foreground">How it works</a>
+          <a href="#features" className="hover:text-foreground">How it works</a>
           <a href="#features" className="hover:text-foreground">Features</a>
           <a href="#pricing" className="hover:text-foreground">Pricing</a>
           <a href="#faq" className="hover:text-foreground">FAQ</a>
