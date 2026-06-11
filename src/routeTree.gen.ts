@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WhyRouteImport } from './routes/why'
+import { Route as StepsRouteImport } from './routes/steps'
 import { Route as HowRouteImport } from './routes/how'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
@@ -24,6 +25,11 @@ import { Route as AuthenticatedSprintsIdRouteImport } from './routes/_authentica
 const WhyRoute = WhyRouteImport.update({
   id: '/why',
   path: '/why',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StepsRoute = StepsRouteImport.update({
+  id: '/steps',
+  path: '/steps',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HowRoute = HowRouteImport.update({
@@ -82,6 +88,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/how': typeof HowRoute
+  '/steps': typeof StepsRoute
   '/why': typeof WhyRoute
   '/affirmations': typeof AuthenticatedAffirmationsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
@@ -94,6 +101,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/how': typeof HowRoute
+  '/steps': typeof StepsRoute
   '/why': typeof WhyRoute
   '/affirmations': typeof AuthenticatedAffirmationsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
@@ -108,6 +116,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/how': typeof HowRoute
+  '/steps': typeof StepsRoute
   '/why': typeof WhyRoute
   '/_authenticated/affirmations': typeof AuthenticatedAffirmationsRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
@@ -122,6 +131,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/how'
+    | '/steps'
     | '/why'
     | '/affirmations'
     | '/dashboard'
@@ -134,6 +144,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/how'
+    | '/steps'
     | '/why'
     | '/affirmations'
     | '/dashboard'
@@ -147,6 +158,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/auth'
     | '/how'
+    | '/steps'
     | '/why'
     | '/_authenticated/affirmations'
     | '/_authenticated/dashboard'
@@ -161,6 +173,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   HowRoute: typeof HowRoute
+  StepsRoute: typeof StepsRoute
   WhyRoute: typeof WhyRoute
 }
 
@@ -171,6 +184,13 @@ declare module '@tanstack/react-router' {
       path: '/why'
       fullPath: '/why'
       preLoaderRoute: typeof WhyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/steps': {
+      id: '/steps'
+      path: '/steps'
+      fullPath: '/steps'
+      preLoaderRoute: typeof StepsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/how': {
@@ -272,8 +292,19 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   HowRoute: HowRoute,
+  StepsRoute: StepsRoute,
   WhyRoute: WhyRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
