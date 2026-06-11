@@ -216,42 +216,6 @@ function Landing() {
         </div>
       </Section>
 
-      {/* HOW IT WORKS */}
-      <Section id="how">
-        <div className="max-w-2xl">
-          <h2 className="text-3xl font-bold sm:text-4xl">Achieve Any Goal in 3 Simple Steps</h2>
-          <p className="mt-4 text-muted-foreground">
-            Stop staring at the mountain. Start taking the first step. Goal Sprinta turns overwhelming
-            ambitions into a simple, repeatable process.
-          </p>
-        </div>
-        <div className="mt-12 grid gap-6 md:grid-cols-3">
-          {[
-            {
-              n: "01",
-              t: "Define Your Mission",
-              d: "Set your big-picture goal. This is your North Star—the “what” and “why” behind your ambition.",
-            },
-            {
-              n: "02",
-              t: "Launch Your First Sprint",
-              d: "Break off a small piece and plan your first two-week sprint with specific, measurable milestones.",
-            },
-            {
-              n: "03",
-              t: "Track, Reward, Repeat",
-              d: "Check in daily, finish strong, claim your reward, and plan the next sprint. Momentum compounds.",
-            },
-          ].map((s) => (
-            <Card key={s.n} className="border-border bg-card p-6 shadow-card">
-              <span className="font-display text-3xl font-bold text-primary">{s.n}</span>
-              <h3 className="mt-4 text-xl font-semibold">{s.t}</h3>
-              <p className="mt-2 text-sm text-muted-foreground">{s.d}</p>
-            </Card>
-          ))}
-        </div>
-      </Section>
-
       {/* FEATURES */}
       <Section id="features">
         <h2 className="max-w-2xl text-3xl font-bold sm:text-4xl">Every feature, purpose-built for finishing.</h2>
