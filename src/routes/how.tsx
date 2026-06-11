@@ -97,9 +97,9 @@ function HowPage() {
         </div>
 
         <div className="mt-12 flex flex-wrap gap-3">
-          <Link to="/auth">
+          <Link to="/steps">
             <Button size="lg" className="bg-gradient-primary text-primary-foreground shadow-glow hover:opacity-90">
-              Start your first sprint — free
+              See the 3 steps
             </Button>
           </Link>
           <Link to="/">
