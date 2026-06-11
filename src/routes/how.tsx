@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, CheckCircle, XCircle, Zap } from "lucide-react";
 
-export const Route = createFileRoute("/why")({
+export const Route = createFileRoute("/how")({
   head: () => ({
     meta: [
       { title: "Why Goal Sprinta — The Problem and the Fix" },
