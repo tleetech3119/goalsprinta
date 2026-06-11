@@ -171,7 +171,7 @@ function Landing() {
           <Sparkles className="h-3.5 w-3.5 text-primary" /> Built for goal-getters
         </div>
         <h1 className="mx-auto mt-8 max-w-3xl text-4xl font-bold leading-[1.05] md:text-6xl">
-          Stop trying.<br /><span className="bg-gradient-primary bg-clip-text text-transparent">Start finishing.</span>
+          Achieve your goals,<br /><span className="bg-gradient-primary bg-clip-text text-transparent">one sprint at a time.</span>
         </h1>
         <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">
           Goal Sprinta is the structured goal-setting app for ambitious individuals who want to finally stop procrastinating and start achieving their biggest life goals.
