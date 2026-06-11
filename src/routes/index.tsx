@@ -35,7 +35,7 @@ function Landing() {
         <div className="mx-auto inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-4 py-1.5 text-xs text-muted-foreground">
           <Sparkles className="h-3.5 w-3.5 text-primary" /> Built for goal-getters
         </div>
-        <h1 className="mx-auto mt-8 max-w-3xl text-5xl font-bold leading-[1.05] md:text-6xl">
+        <h1 className="mx-auto mt-8 max-w-3xl text-4xl font-bold leading-[1.05] md:text-5xl">
           Achieve your goals,<br /><span className="bg-gradient-primary bg-clip-text text-transparent">one sprint at a time.</span>
         </h1>
         <p className="mx-auto mt-6 max-w-xl text-lg text-muted-foreground">
