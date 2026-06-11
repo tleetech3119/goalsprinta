@@ -66,7 +66,7 @@ function Landing() {
 
       <section id="problem-solution" className="scroll-mt-16 border-t border-border bg-card/20">
         <article className="container mx-auto max-w-3xl px-6 py-24">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Problem &amp; Solution</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Problem</p>
           <h2 className="mt-4 font-display text-4xl font-bold leading-tight md:text-5xl">The &quot;Someday&quot; Trap</h2>
 
           <div className="mt-10 space-y-6 text-lg leading-relaxed text-muted-foreground">
@@ -95,7 +95,7 @@ function Landing() {
           </div>
 
           <div className="mt-16">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">The Fix</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Solution</p>
             <h3 className="mt-4 font-display text-3xl font-bold leading-tight md:text-4xl">
               From overwhelmed to <span className="bg-gradient-primary bg-clip-text text-transparent">&apos;done&apos;</span> in two-week sprints
             </h3>
