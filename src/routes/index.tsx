@@ -537,13 +537,7 @@ function Landing() {
       <footer className="border-t border-border bg-card/30">
         <div className="container mx-auto grid gap-12 px-6 py-16 md:grid-cols-2">
           <div>
-            <div className="flex items-center gap-2.5 font-display text-xl font-bold">
-              <span className="grid h-9 w-9 place-items-center rounded-lg bg-gradient-primary text-primary-foreground"><Zap className="h-4 w-4" /></span>
-              Goal Sprinta
-            </div>
-            <p className="mt-4 text-sm text-muted-foreground">
-              Goal Sprinta: Achieve your goals, one sprint at a time.
-            </p>
+
             <p className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
               <Shield className="h-3.5 w-3.5 text-primary" />
               <span>SOC 2 Type II Certified</span><span>·</span>
