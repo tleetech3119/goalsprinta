@@ -144,16 +144,6 @@ function Landing() {
             </div>
           </div>
 
-          <div className="mt-12 flex flex-wrap gap-3">
-            <Link to="/steps">
-              <Button size="lg" className="bg-gradient-primary text-primary-foreground shadow-glow hover:opacity-90">
-                See the 3 steps
-              </Button>
-            </Link>
-            <Link to="/auth">
-              <Button size="lg" variant="outline">Start sprinting — free</Button>
-            </Link>
-          </div>
         </article>
       </section>
 
