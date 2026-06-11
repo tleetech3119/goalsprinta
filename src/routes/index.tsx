@@ -254,39 +254,6 @@ function Landing() {
         </div>
       </Section>
 
-      {/* SOCIAL PROOF */}
-      <Section>
-        <div className="grid gap-4 rounded-2xl border border-border bg-card p-8 text-center shadow-card sm:grid-cols-3">
-          {[
-            ["87%", "Average goal completion rate"],
-            ["1.25M+", "Sprints completed by users"],
-            ["3×", "More likely to hit goals vs. no system"],
-          ].map(([n, l]) => (
-            <div key={l}>
-              <p className="font-display text-4xl font-bold text-primary">{n}</p>
-              <p className="mt-2 text-sm text-muted-foreground">{l}</p>
-            </div>
-          ))}
-        </div>
-
-        <div className="mt-12 grid gap-6 md:grid-cols-2">
-          {[
-            { q: "I've tried every planner and to-do list app out there. Goal Sprinta is the first thing that's actually worked for my freelance business. I hit my Q2 goal 3 weeks early.", a: "Sarah K.", r: "Freelance Designer" },
-            { q: "My main goal—‘finish dissertation’—is so massive it's paralyzing. Goal Sprinta helped me break it into ‘draft one chapter section’ sprints. It’s the only reason I’m still sane and on track.", a: "Ben T.", r: "PhD Candidate" },
-            { q: "We use Goal Sprinta to track our marketing team's OKRs. We're shipping campaigns faster and morale is way up. Better than our clunky project management software.", a: "Maria G.", r: "Head of Marketing" },
-            { q: "For years my goal was ‘get in shape.’ It never happened. My first sprint was ‘gym 3× this week.’ I did it. Rewarding myself with new running shoes after 4 sprints felt amazing.", a: "David L.", r: "Sales Executive" },
-          ].map((t) => (
-            <Card key={t.a} className="border-border bg-card p-6 shadow-card">
-              <div className="flex gap-1 text-primary">
-                {[...Array(5)].map((_, i) => <Star key={i} className="h-4 w-4 fill-current" />)}
-              </div>
-              <p className="mt-4 text-base leading-relaxed">“{t.q}”</p>
-              <p className="mt-4 text-sm font-semibold">{t.a}</p>
-              <p className="text-xs text-muted-foreground">{t.r}</p>
-            </Card>
-          ))}
-        </div>
-      </Section>
 
       {/* COMPARISON */}
       <Section className="max-w-5xl">
