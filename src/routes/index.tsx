@@ -180,7 +180,7 @@ function Landing() {
           <Link to="/auth"><Button size="lg" className="bg-gradient-primary text-primary-foreground shadow-glow hover:opacity-90">Start Your Free Sprint</Button></Link>
           <a href="#how"><Button size="lg" variant="outline">Watch a 2-minute demo</Button></a>
         </div>
-        <p className="mt-4 text-xs text-muted-foreground">14-day free trial. No credit card required.</p>
+        
 
         <div className="mt-24 grid gap-6 md:grid-cols-3">
           {[
@@ -528,7 +528,7 @@ function Landing() {
             <a href="#how"><Button size="lg" variant="outline">Watch the 2-minute demo</Button></a>
           </div>
           <p className="mt-4 text-xs text-muted-foreground">
-            14-day free trial. No credit card required. A new outcome is just one sprint away.
+            A new outcome is just one sprint away.
           </p>
         </article>
       </section>
