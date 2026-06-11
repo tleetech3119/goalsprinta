@@ -56,9 +56,9 @@ function WhyPage() {
         </div>
 
         <div className="mt-12 flex flex-wrap gap-3">
-          <Link to="/auth">
+          <Link to="/how">
             <Button size="lg" className="bg-gradient-primary text-primary-foreground shadow-glow hover:opacity-90">
-              Build your system — free
+              See the solution
             </Button>
           </Link>
           <Link to="/">
