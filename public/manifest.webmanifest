@@ -1,0 +1,15 @@
+{
+  "name": "Goal Sprinta",
+  "short_name": "Sprinta",
+  "description": "Achieve your goals, one sprint at a time.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0F0A1F",
+  "theme_color": "#0F0A1F",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
